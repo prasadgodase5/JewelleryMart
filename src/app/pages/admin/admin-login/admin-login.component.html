@@ -1,0 +1,37 @@
+<section class="login-page">
+  <a routerLink="/" class="brand-pill">
+    <span>CC</span> {{ brand.name }}
+  </a>
+
+  <div class="login-card">
+    <h2 class="gold-gradient-text mb-1">Admin Portal</h2>
+    <p class="text-muted-light small mb-4">Sign in to manage products and orders</p>
+
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input class="form-control" type="email" name="email" required
+               [(ngModel)]="email" autocomplete="email">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input class="form-control" type="password" name="password" required minlength="6"
+               [(ngModel)]="password" autocomplete="current-password">
+      </div>
+
+      <div class="alert-error mb-3" *ngIf="error()">{{ error() }}</div>
+
+      <button type="submit" class="btn-gold w-100 justify-content-center" [disabled]="loading()">
+        <span *ngIf="!loading()"><i class="bi bi-box-arrow-in-right"></i> Sign In</span>
+        <span *ngIf="loading()">Signing in…</span>
+      </button>
+    </form>
+
+    <div class="hint mt-4 small">
+      <i class="bi bi-info-circle"></i>
+      Create the admin user in
+      <strong>Firebase Console → Authentication → Users → Add user</strong>.
+    </div>
+  </div>
+</section>

@@ -1,0 +1,34 @@
+<header class="site-header">
+  <div class="container-fluid container-xl d-flex align-items-center justify-content-between py-3 px-3 px-md-4">
+    <a routerLink="/" class="brand text-decoration-none" (click)="closeMenu()">
+      <span class="brand-mark"><span class="mark-glyph">CC</span></span>
+      <span class="brand-text d-none d-sm-flex flex-column">
+        <span class="brand-name">{{ brand.name }}</span>
+        <span class="brand-tagline">{{ brand.creator }}</span>
+      </span>
+    </a>
+
+    <nav class="primary-nav d-none d-lg-flex align-items-center gap-4">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/products" routerLinkActive="active">Shop</a>
+      <a routerLink="/cart" routerLinkActive="active">Cart</a>
+    </nav>
+
+    <div class="d-flex align-items-center gap-3">
+      <a routerLink="/cart" class="cart-icon position-relative" aria-label="Cart">
+        <i class="bi bi-bag"></i>
+        <span class="cart-badge" *ngIf="cart.count() > 0">{{ cart.count() }}</span>
+      </a>
+      <button class="hamburger d-lg-none" type="button" (click)="toggleMenu()" aria-label="Menu">
+        <i class="bi" [ngClass]="menuOpen ? 'bi-x-lg' : 'bi-list'"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu d-lg-none" [class.open]="menuOpen">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+    <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Shop</a>
+    <a routerLink="/cart" routerLinkActive="active" (click)="closeMenu()">Cart</a>
+    <a routerLink="/admin/login" (click)="closeMenu()">Admin</a>
+  </div>
+</header>

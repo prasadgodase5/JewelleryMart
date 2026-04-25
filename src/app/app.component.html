@@ -1,0 +1,9 @@
+<app-header *ngIf="!isAdminRoute"></app-header>
+
+<main class="main-shell">
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer *ngIf="!isAdminRoute"></app-footer>
+<app-contact-button *ngIf="!isAdminRoute"></app-contact-button>
+<app-contact-dialog></app-contact-dialog>

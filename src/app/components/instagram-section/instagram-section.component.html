@@ -1,0 +1,62 @@
+<section class="ig-section">
+  <div class="ig-bg"></div>
+
+  <div class="container position-relative">
+    <div class="text-center mb-4">
+      <span class="eyebrow">Follow our journey</span>
+      <h2 class="section-title gold-gradient-text">On Instagram</h2>
+    </div>
+
+    <div class="ig-card">
+      <!-- Profile header -->
+      <div class="ig-profile">
+        <div class="ig-avatar-ring">
+          <div class="ig-avatar">
+            <span>{{ brand.instagramOwner.charAt(0) }}</span>
+          </div>
+        </div>
+
+        <div class="ig-profile-info">
+          <div class="ig-handle-row">
+            <a [href]="brand.instagram" target="_blank" rel="noopener" class="ig-handle">
+              {{ brand.instagramHandle }}
+            </a>
+            <a [href]="brand.instagram" target="_blank" rel="noopener" class="ig-follow-btn">
+              <i class="bi bi-instagram"></i> Follow
+            </a>
+          </div>
+
+          <div class="ig-stats">
+            <div><strong>{{ brand.instagramStats.posts }}</strong><span>posts</span></div>
+            <div><strong>{{ brand.instagramStats.followers }}</strong><span>followers</span></div>
+            <div><strong>{{ brand.instagramStats.following }}</strong><span>following</span></div>
+          </div>
+
+          <div class="ig-name">{{ brand.instagramOwner }} <span class="emoji">😊</span></div>
+          <div class="ig-bio" [innerText]="brand.instagramBio"></div>
+        </div>
+      </div>
+
+      <!-- Story highlights -->
+      <div class="ig-highlights">
+        <a [href]="brand.instagram" target="_blank" rel="noopener"
+           class="highlight" *ngFor="let h of highlights">
+          <span class="hl-circle">{{ h.emoji }}</span>
+          <span class="hl-label">{{ h.name }}</span>
+        </a>
+      </div>
+
+      <!-- CTA -->
+      <div class="ig-cta">
+        <a [href]="brand.instagram" target="_blank" rel="noopener" class="ig-cta-btn">
+          <i class="bi bi-instagram"></i>
+          <span>Visit our Instagram</span>
+          <i class="bi bi-arrow-up-right"></i>
+        </a>
+        <small class="text-muted-light d-block mt-3">
+          DM us for orders, custom designs, and inquiries
+        </small>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,95 @@
+<div class="admin-page">
+  <div class="mb-4">
+    <h2 class="page-h">Orders</h2>
+    <small class="text-muted-light">Verify payment and manage fulfilment</small>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3"><div class="stat-card"><span>Total</span><strong>{{ stats().total }}</strong></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card pending"><span>Pending</span><strong>{{ stats().pending }}</strong></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card paid"><span>Paid</span><strong>{{ stats().paid }}</strong></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card revenue"><span>Revenue</span><strong>₹{{ stats().revenue | number }}</strong></div></div>
+  </div>
+
+  <div class="alert-error mb-3" *ngIf="error()">{{ error() }}</div>
+
+  <!-- Filter -->
+  <div class="filter-pills mb-3">
+    <button *ngFor="let f of ['All','Pending','Paid','Completed','Cancelled']"
+            class="pill"
+            [class.active]="filter() === f"
+            (click)="setFilter($any(f))">{{ f }}</button>
+  </div>
+
+  <div class="spinner-gold" *ngIf="loading()"></div>
+
+  <div *ngIf="!loading() && filtered().length === 0" class="empty">
+    <i class="bi bi-receipt-cutoff"></i>
+    <p>No orders {{ filter() !== 'All' ? 'with status ' + filter() : 'yet' }}.</p>
+  </div>
+
+  <div class="orders-list" *ngIf="!loading() && filtered().length">
+    <div class="order-card" *ngFor="let o of filtered()">
+      <div class="order-head" (click)="toggle(o.id)">
+        <div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <strong class="order-id">#{{ o.id?.substring(0, 8) }}</strong>
+            <span class="badge-status" [attr.data-s]="o.paymentStatus">{{ o.paymentStatus }}</span>
+          </div>
+          <small class="text-muted-light">
+            {{ o.userDetails?.name }} · {{ o.userDetails?.phone }} · {{ fmtDate(o.createdAt) }}
+          </small>
+        </div>
+        <div class="text-end">
+          <div class="amount">₹{{ o.totalAmount | number }}</div>
+          <small class="text-muted-light">{{ o.products.length }} item(s)</small>
+        </div>
+      </div>
+
+      <div class="order-body" *ngIf="expanded() === o.id">
+        <div class="row g-3">
+          <div class="col-12 col-md-7">
+            <div class="block">
+              <h6>Items</h6>
+              <div class="line" *ngFor="let p of o.products">
+                <img [src]="p.image || 'assets/placeholder.svg'" alt="">
+                <div class="flex-grow-1">
+                  <strong>{{ p.name }}</strong>
+                  <small class="d-block text-muted-light">{{ p.material }} · Qty {{ p.quantity }}</small>
+                </div>
+                <span>₹{{ p.price * p.quantity | number }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-5">
+            <div class="block">
+              <h6>Customer</h6>
+              <p class="mb-1"><i class="bi bi-person me-2 text-gold"></i>{{ o.userDetails?.name }}</p>
+              <p class="mb-1"><i class="bi bi-telephone me-2 text-gold"></i>{{ o.userDetails?.phone }}</p>
+              <p class="mb-1" *ngIf="o.userDetails?.email">
+                <i class="bi bi-envelope me-2 text-gold"></i>{{ o.userDetails?.email }}
+              </p>
+              <p class="mb-1"><i class="bi bi-geo-alt me-2 text-gold"></i>{{ o.userDetails?.address }}</p>
+              <p class="mb-0 small text-muted-light" *ngIf="o.userDetails?.notes">
+                <em>"{{ o.userDetails?.notes }}"</em>
+              </p>
+            </div>
+
+            <div class="block mt-3">
+              <h6>Update status</h6>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn-mini" *ngFor="let s of ['Pending','Paid','Completed','Cancelled']"
+                        [class.active]="o.paymentStatus === s"
+                        (click)="setStatus(o, $any(s))">
+                  {{ s }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

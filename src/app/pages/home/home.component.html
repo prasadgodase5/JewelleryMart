@@ -1,0 +1,103 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content position-relative animate-fade-in">
+    <span class="eyebrow">Creative Collection</span>
+    <h1 class="display-3 fw-bold gold-gradient-text mb-3">
+      Timeless Jewellery,<br/>Crafted for You
+    </h1>
+    <p class="lead text-muted-light mb-4 col-lg-7 mx-auto">
+      Discover our curated selection of handcrafted gold, silver and diamond jewellery —
+      designed to make every moment unforgettable.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a routerLink="/products" class="btn-gold">Shop Collection <i class="bi bi-arrow-right"></i></a>
+      <a [href]="'#featured'" class="btn-outline-gold">Featured</a>
+    </div>
+  </div>
+  <div class="hero-scroll-cue"><i class="bi bi-chevron-down"></i></div>
+</section>
+
+<!-- VALUES -->
+<section class="container py-5">
+  <div class="row text-center g-4">
+    <div class="col-6 col-md-3">
+      <div class="value-card">
+        <i class="bi bi-gem"></i>
+        <h6>Premium Quality</h6>
+        <small>Hallmark certified materials</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="value-card">
+        <i class="bi bi-truck"></i>
+        <h6>Fast Shipping</h6>
+        <small>Across India, securely</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="value-card">
+        <i class="bi bi-shield-check"></i>
+        <h6>Trusted Pay</h6>
+        <small>Secure UPI checkout</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="value-card">
+        <i class="bi bi-heart"></i>
+        <h6>Handcrafted</h6>
+        <small>Artisan made with love</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section id="featured" class="container py-5">
+  <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between mb-4">
+    <div>
+      <span class="eyebrow text-gold">Editor's Pick</span>
+      <h2 class="section-title mb-0">Featured Jewellery</h2>
+    </div>
+    <a routerLink="/products" class="btn-outline-gold mt-3 mt-md-0">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+
+  <div class="spinner-gold" *ngIf="loading()"></div>
+
+  <div class="row g-3 g-md-4" *ngIf="!loading()">
+    <div class="col-6 col-md-4 col-lg-3 animate-slide-up" *ngFor="let p of featured()">
+      <app-product-card [product]="p"></app-product-card>
+    </div>
+    <div *ngIf="featured().length === 0" class="text-center text-muted-light py-5">
+      No featured products yet.
+    </div>
+  </div>
+</section>
+
+<!-- RECENT GRID -->
+<section class="container py-5">
+  <div class="mb-4">
+    <span class="eyebrow text-gold">Just Arrived</span>
+    <h2 class="section-title mb-0">New Collection</h2>
+  </div>
+
+  <div class="row g-3 g-md-4" *ngIf="!loading()">
+    <div class="col-6 col-md-4 col-lg-3 animate-slide-up" *ngFor="let p of recent()">
+      <app-product-card [product]="p"></app-product-card>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM PROFILE -->
+<app-instagram-section></app-instagram-section>
+
+<!-- CTA -->
+<section class="container py-5 mb-4">
+  <div class="cta-card">
+    <h3 class="mb-3">Customize Your Dream Piece</h3>
+    <p class="text-muted-light mb-4">
+      Have something special in mind? Reach out and our designers will craft it exclusively for you.
+    </p>
+    <a routerLink="/products" class="btn-gold">Explore Now</a>
+  </div>
+</section>

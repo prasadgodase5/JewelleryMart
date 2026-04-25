@@ -1,0 +1,69 @@
+<section class="container py-4 py-md-5">
+  <div class="text-center mb-4">
+    <span class="page-eyebrow">Your Selection</span>
+    <h1 class="page-title gold-gradient-text">Shopping Cart</h1>
+  </div>
+
+  <div *ngIf="cart.cart().length === 0" class="empty-state">
+    <i class="bi bi-bag-x"></i>
+    <h4>Your cart is empty</h4>
+    <p class="text-muted-light">Discover something beautiful from our collection.</p>
+    <a routerLink="/products" class="btn-gold">Continue Shopping</a>
+  </div>
+
+  <div class="row g-4" *ngIf="cart.cart().length > 0">
+    <div class="col-12 col-lg-8">
+      <div class="cart-list">
+        <div class="cart-row" *ngFor="let item of cart.cart()">
+          <img [src]="item.image || 'assets/placeholder.svg'" [alt]="item.name" loading="lazy">
+          <div class="cart-info">
+            <h6 class="mb-1">{{ item.name }}</h6>
+            <small class="text-muted-light">{{ item.material }}</small>
+            <div class="d-flex align-items-center gap-3 mt-2 flex-wrap">
+              <div class="qty-control sm">
+                <button (click)="cart.decrement(item.productId)">−</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="cart.increment(item.productId)">+</button>
+              </div>
+              <button class="btn-remove" (click)="cart.remove(item.productId)">
+                <i class="bi bi-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+          <div class="cart-price gold-gradient-text">
+            ₹{{ item.price * item.quantity | number }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="summary-card">
+        <h5 class="mb-3">Order Summary</h5>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted-light">Items</span>
+          <span>{{ cart.count() }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted-light">Subtotal</span>
+          <span>₹{{ cart.total() | number }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted-light">Shipping</span>
+          <span class="text-success small">FREE</span>
+        </div>
+        <hr class="border-secondary">
+        <div class="d-flex justify-content-between fw-bold mb-3">
+          <span>Total</span>
+          <span class="gold-gradient-text fs-4">₹{{ cart.total() | number }}</span>
+        </div>
+        <a routerLink="/checkout" class="btn-gold w-100 justify-content-center">
+          Proceed to Checkout <i class="bi bi-arrow-right"></i>
+        </a>
+        <a routerLink="/products" class="d-block text-center mt-3 text-muted-light small">
+          ← Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

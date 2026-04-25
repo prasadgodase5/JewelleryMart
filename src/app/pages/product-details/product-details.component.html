@@ -1,0 +1,88 @@
+<section class="container py-4 py-md-5">
+  <a routerLink="/products" class="back-link mb-3 d-inline-flex align-items-center gap-1">
+    <i class="bi bi-chevron-left"></i> Back to shop
+  </a>
+
+  <div class="spinner-gold" *ngIf="loading()"></div>
+
+  <ng-container *ngIf="!loading() && product() as p">
+    <div class="row g-4 g-lg-5 mt-2">
+      <!-- Carousel / Gallery -->
+      <div class="col-12 col-lg-6">
+        <div class="hero-img mb-3">
+          <img [src]="p.images[activeImg()]" [alt]="p.name" loading="eager">
+          <button *ngIf="p.images.length > 1" class="nav-btn left"
+                  (click)="setActive((activeImg() - 1 + p.images.length) % p.images.length)">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button *ngIf="p.images.length > 1" class="nav-btn right"
+                  (click)="setActive((activeImg() + 1) % p.images.length)">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+        <div class="thumb-row" *ngIf="p.images.length > 1">
+          <button *ngFor="let img of p.images; let i = index"
+                  class="thumb"
+                  [class.active]="i === activeImg()"
+                  (click)="setActive(i)">
+            <img [src]="img" [alt]="'thumb ' + (i+1)" loading="lazy">
+          </button>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="col-12 col-lg-6">
+        <span class="cat-tag" *ngIf="p.category">{{ p.category }}</span>
+        <h1 class="product-title">{{ p.name }}</h1>
+        <div class="material small text-muted-light mb-2">
+          <i class="bi bi-gem me-1"></i>{{ p.material }}
+        </div>
+        <div class="price gold-gradient-text">₹{{ p.price | number }}</div>
+        <div class="size mb-3 text-muted-light"><strong>Size:</strong> {{ p.size }}</div>
+
+        <p class="description mb-4">{{ p.description }}</p>
+
+        <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
+          <div class="qty-control">
+            <button (click)="dec()" aria-label="decrease">−</button>
+            <span>{{ quantity() }}</span>
+            <button (click)="inc()" aria-label="increase">+</button>
+          </div>
+          <small class="text-muted-light" *ngIf="p.inStock !== false">In Stock</small>
+          <small class="text-danger" *ngIf="p.inStock === false">Sold Out</small>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row gap-2">
+          <button class="btn-gold flex-grow-1"
+                  [disabled]="p.inStock === false"
+                  (click)="buyNow()">
+            <i class="bi bi-bag-check"></i> Buy Now
+          </button>
+          <button class="btn-outline-gold flex-grow-1"
+                  [disabled]="p.inStock === false"
+                  (click)="addToCart()">
+            <i class="bi bi-bag-plus"></i> Add to Cart
+          </button>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <a [href]="brand.instagram" target="_blank" rel="noopener" class="insta-cta">
+            <i class="bi bi-instagram"></i> Order on Instagram
+          </a>
+          <button type="button" class="inquire-cta" (click)="inquire()">
+            <i class="bi bi-chat-dots"></i> Inquire about this piece
+          </button>
+        </div>
+
+        <div class="toast-added" *ngIf="added()">
+          <i class="bi bi-check-circle-fill"></i> Added to cart
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div *ngIf="!loading() && !product()" class="text-center py-5">
+    <h3 class="text-muted-light mb-3">Product not found</h3>
+    <a routerLink="/products" class="btn-gold">Back to Shop</a>
+  </div>
+</section>

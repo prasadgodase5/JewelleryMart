@@ -1,0 +1,84 @@
+<div class="contact-overlay" *ngIf="open()" (click)="close()" role="presentation"></div>
+
+<div class="contact-modal" *ngIf="open()" role="dialog" aria-modal="true">
+  <button class="close-btn" type="button" (click)="close()" aria-label="Close">
+    <i class="bi bi-x-lg"></i>
+  </button>
+
+  <ng-container *ngIf="!success()">
+    <div class="modal-header-block">
+      <span class="eyebrow">Get in touch</span>
+      <h3 class="gold-gradient-text mb-1">Contact Us</h3>
+      <p class="text-muted-light small mb-0">
+        Send us a message and we'll reply soon. Your details stay private.
+      </p>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="submit(f)" novalidate class="mt-3">
+      <div class="row g-2 g-md-3">
+        <div class="col-12">
+          <label class="form-label">Name *</label>
+          <input class="form-control" name="name" required minlength="2"
+                 [(ngModel)]="form.name" #nameCtrl="ngModel">
+          <small class="text-danger" *ngIf="nameCtrl.touched && nameCtrl.invalid">Please enter your name</small>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label">Phone</label>
+          <input class="form-control" name="phone" inputmode="tel"
+                 [(ngModel)]="form.phone" placeholder="Optional">
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label">Email</label>
+          <input class="form-control" type="email" name="email"
+                 [(ngModel)]="form.email" placeholder="Optional">
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Subject</label>
+          <input class="form-control" name="subject"
+                 [(ngModel)]="form.subject" placeholder="What's this about?">
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Message *</label>
+          <textarea class="form-control" rows="4" name="message" required minlength="5"
+                    [(ngModel)]="form.message" #msgCtrl="ngModel"
+                    placeholder="Tell us what you're looking for..."></textarea>
+          <small class="text-danger" *ngIf="msgCtrl.touched && msgCtrl.invalid">Please write at least a few words</small>
+        </div>
+
+        <div class="col-12" *ngIf="prefill().productName">
+          <small class="product-context">
+            <i class="bi bi-link-45deg"></i> About product:
+            <strong>{{ prefill().productName }}</strong>
+          </small>
+        </div>
+
+        <div class="col-12" *ngIf="error()">
+          <div class="alert-error">{{ error() }}</div>
+        </div>
+
+        <div class="col-12 d-flex gap-2 justify-content-end mt-2">
+          <button type="button" class="btn-outline-gold" (click)="close()" [disabled]="submitting()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-gold" [disabled]="submitting()">
+            <span *ngIf="!submitting()"><i class="bi bi-send"></i> Send Message</span>
+            <span *ngIf="submitting()">Sending…</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <div class="success-block" *ngIf="success()">
+    <i class="bi bi-check-circle-fill"></i>
+    <h3 class="gold-gradient-text mb-2">Message Sent!</h3>
+    <p class="text-muted-light mb-4">
+      Thank you for reaching out. We'll get back to you as soon as possible.
+    </p>
+    <button class="btn-gold" type="button" (click)="close()">Close</button>
+  </div>
+</div>

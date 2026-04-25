@@ -1,0 +1,49 @@
+<footer class="site-footer">
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-12 col-md-5">
+        <h3 class="brand-title gold-gradient-text mb-1">{{ brand.name }}</h3>
+        <small class="brand-creator d-block mb-3">{{ brand.creator }}</small>
+        <p class="text-muted-light mb-3">
+          Premium handcrafted jewellery for every occasion. Designed with passion, finished with care.
+        </p>
+        <div class="d-flex gap-3">
+          <button type="button" class="social-icon-btn" (click)="openContact()" aria-label="Contact us">
+            <i class="bi bi-chat-dots"></i>
+          </button>
+          <a [href]="'mailto:' + brand.email" aria-label="Email"><i class="bi bi-envelope"></i></a>
+          <a [href]="brand.instagram" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <h6 class="footer-heading">Shop</h6>
+        <ul class="list-unstyled small">
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/products">All Products</a></li>
+          <li><a routerLink="/cart">Cart</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-md-4">
+        <h6 class="footer-heading">Contact</h6>
+        <ul class="list-unstyled small">
+          <li>
+            <button type="button" class="link-btn" (click)="openContact()">
+              <i class="bi bi-chat-dots me-2"></i>Send us a message
+            </button>
+          </li>
+          <li><i class="bi bi-envelope me-2"></i>{{ brand.email }}</li>
+          <li><i class="bi bi-geo-alt me-2"></i>{{ brand.address }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="my-4 footer-line">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <small class="text-muted-light">&copy; {{ year }} {{ brand.name }}. All rights reserved.</small>
+      <small class="text-muted-light"><a routerLink="/admin/login" class="admin-link">Admin Login</a></small>
+    </div>
+  </div>
+</footer>

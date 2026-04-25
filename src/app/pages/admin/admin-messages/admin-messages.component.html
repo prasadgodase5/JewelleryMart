@@ -1,0 +1,90 @@
+<div class="admin-page">
+  <div class="mb-4">
+    <h2 class="page-h">Messages</h2>
+    <small class="text-muted-light">Customer inquiries via the contact form</small>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3"><div class="stat-card"><span>Total</span><strong>{{ stats().total }}</strong></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card new"><span>New</span><strong>{{ stats().new }}</strong></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card read"><span>Read</span><strong>{{ stats().read }}</strong></div></div>
+    <div class="col-6 col-md-3"><div class="stat-card replied"><span>Replied</span><strong>{{ stats().replied }}</strong></div></div>
+  </div>
+
+  <div class="alert-error mb-3" *ngIf="error()">{{ error() }}</div>
+
+  <div class="filter-pills mb-3">
+    <button *ngFor="let f of ['All','New','Read','Replied','Archived']"
+            class="pill"
+            [class.active]="filter() === f"
+            (click)="setFilter($any(f))">{{ f }}</button>
+  </div>
+
+  <div class="spinner-gold" *ngIf="loading()"></div>
+
+  <div *ngIf="!loading() && filtered().length === 0" class="empty">
+    <i class="bi bi-chat-square-text"></i>
+    <p>No messages {{ filter() !== 'All' ? 'with status ' + filter() : 'yet' }}.</p>
+  </div>
+
+  <div class="msg-list" *ngIf="!loading() && filtered().length">
+    <div class="msg-card" *ngFor="let m of filtered()" [class.is-new]="m.status === 'New'">
+      <div class="msg-head" (click)="toggle(m)">
+        <div class="flex-grow-1 min-w-0">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <strong class="msg-from">{{ m.name }}</strong>
+            <span class="badge-status" [attr.data-s]="m.status">{{ m.status }}</span>
+          </div>
+          <small class="text-muted-light text-truncate d-block">
+            {{ m.subject || (m.productName ? 'Re: ' + m.productName : 'New message') }}
+            · {{ fmtDate(m.createdAt) }}
+          </small>
+        </div>
+        <i class="bi" [class.bi-chevron-down]="expanded() !== m.id" [class.bi-chevron-up]="expanded() === m.id"></i>
+      </div>
+
+      <div class="msg-body" *ngIf="expanded() === m.id">
+        <div class="row g-3">
+          <div class="col-12 col-md-7">
+            <div class="block">
+              <h6>Message</h6>
+              <p class="msg-text">{{ m.message }}</p>
+              <div class="prod-link" *ngIf="m.productName">
+                <i class="bi bi-link-45deg"></i> About: <strong>{{ m.productName }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-5">
+            <div class="block">
+              <h6>Contact</h6>
+              <p class="mb-1"><i class="bi bi-person me-2 text-gold"></i>{{ m.name }}</p>
+              <p class="mb-1" *ngIf="m.phone">
+                <i class="bi bi-telephone me-2 text-gold"></i>
+                <a [href]="'tel:' + m.phone" class="muted-link">{{ m.phone }}</a>
+              </p>
+              <p class="mb-1" *ngIf="m.email">
+                <i class="bi bi-envelope me-2 text-gold"></i>
+                <a [href]="'mailto:' + m.email" class="muted-link">{{ m.email }}</a>
+              </p>
+            </div>
+
+            <div class="block mt-3">
+              <h6>Update status</h6>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn-mini" *ngFor="let s of ['New','Read','Replied','Archived']"
+                        [class.active]="m.status === s"
+                        (click)="setStatus(m, $any(s))">
+                  {{ s }}
+                </button>
+              </div>
+              <button class="btn-mini danger mt-3" (click)="remove(m)">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

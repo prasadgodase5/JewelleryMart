@@ -1,0 +1,20 @@
+<div class="order-fab-wrap" [class.is-open]="expanded()">
+
+  <div class="action-list" [class.show]="expanded()">
+    <button type="button" class="action-pill action-msg" (click)="openMessage()">
+      <span class="label">Send Message</span>
+      <span class="action-icon"><i class="bi bi-chat-dots-fill"></i></span>
+    </button>
+    <button type="button" class="action-pill action-insta" (click)="openInstagram()">
+      <span class="label">Order on Instagram</span>
+      <span class="action-icon"><i class="bi bi-instagram"></i></span>
+    </button>
+  </div>
+
+  <button type="button" class="order-fab" (click)="toggle()" aria-label="Order options">
+    <i class="bi" [class.bi-bag-fill]="!expanded()" [class.bi-x-lg]="expanded()"></i>
+    <span class="label d-none d-md-inline">{{ expanded() ? 'Close' : 'Order Now' }}</span>
+  </button>
+</div>
+
+<div class="fab-backdrop" *ngIf="expanded()" (click)="close()"></div>

@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: check signed-in admin (any authenticated user is treated as admin
+    // since admin sign-up should be done manually in Firebase Console).
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Products: public read, admin write
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Orders: anyone can create (place an order); only admin can read/update/delete
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Contact messages: anyone can submit; only admin can read/update/delete
+    match /contacts/{contactId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

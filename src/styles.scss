@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Global luxury theme (gold + black) ---------- */
+:root {
+  --gold: #d4a017;
+  --gold-light: #efc94c;
+  --gold-dark: #b88110;
+  --ink: #0a0a0a;
+  --ink-soft: #1a1a1a;
+  --ink-card: #161616;
+  --line: rgba(212, 160, 23, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0a0a0a 0%, #141414 100%);
+  color: #f5f5f5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.text-gold { color: var(--gold) !important; }
+.bg-gold { background-color: var(--gold) !important; }
+.border-gold { border-color: var(--gold) !important; }
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #efc94c 0%, #d4a017 50%, #b88110 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Buttons */
+.btn-gold {
+  background: linear-gradient(135deg, #efc94c 0%, #d4a017 100%);
+  color: #0a0a0a;
+  font-weight: 600;
+  border: none;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(212, 160, 23, 0.5);
+  color: #0a0a0a;
+}
+.btn-gold:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-outline-gold {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-outline-gold:hover {
+  background: var(--gold);
+  color: #0a0a0a;
+}
+
+/* Card */
+.luxury-card {
+  background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.luxury-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold);
+  box-shadow: 0 20px 40px -15px rgba(212, 160, 23, 0.3);
+}
+
+/* Inputs */
+.form-control, .form-select {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(212, 160, 23, 0.3) !important;
+  color: #f5f5f5 !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 10px !important;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 0.2rem rgba(212, 160, 23, 0.2) !important;
+  background: #1a1a1a !important;
+  color: #f5f5f5 !important;
+}
+.form-control::placeholder,
+.form-select::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: rgba(245, 245, 245, 0.55) !important;
+  opacity: 1 !important;
+  font-weight: 400;
+}
+.form-control::-webkit-input-placeholder,
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: rgba(245, 245, 245, 0.55) !important;
+}
+.form-control::-moz-placeholder,
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: rgba(245, 245, 245, 0.55) !important;
+  opacity: 1 !important;
+}
+.form-label { color: #d4d4d4; font-size: 0.9rem; font-weight: 500; }
+
+/* Spinner */
+.spinner-gold {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(212, 160, 23, 0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin: 2rem auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Image shimmer placeholder */
+.img-shimmer {
+  background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%); border-radius: 5px; }
+
+/* Utility */
+.text-muted-light { color: #a0a0a0 !important; }
+.divider-gold { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 2rem 0; }
+
+/* Bootstrap modal dark override */
+.modal-content { background: #161616; color: #f5f5f5; border: 1px solid var(--line); }
+
+@media (max-width: 768px) {
+  .btn-gold, .btn-outline-gold { padding: 0.65rem 1.25rem; font-size: 0.82rem; min-height: 42px; }
+  .display-3 { font-size: 1.9rem !important; line-height: 1.15; }
+  .display-4 { font-size: 1.6rem !important; line-height: 1.15; }
+  .lead { font-size: 0.95rem !important; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.2rem; }
+  .container, .container-xl { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .py-5 { padding-top: 2.2rem !important; padding-bottom: 2.2rem !important; }
+  .my-5 { margin-top: 2rem !important; margin-bottom: 2rem !important; }
+}
+
+@media (max-width: 575.98px) {
+  body { font-size: 0.95rem; }
+  .btn-gold, .btn-outline-gold { padding: 0.6rem 1.1rem; font-size: 0.78rem; }
+  .container, .container-xl { padding-left: 0.85rem !important; padding-right: 0.85rem !important; }
+  .form-control, .form-select { padding: 0.65rem 0.85rem !important; font-size: 0.92rem !important; }
+}
+
+@media (max-width: 360px) {
+  .container, .container-xl { padding-left: 0.7rem !important; padding-right: 0.7rem !important; }
+  .btn-gold, .btn-outline-gold { padding: 0.55rem 0.95rem; font-size: 0.74rem; }
+}
+
+/* Prevent any element from causing horizontal scroll */
+img, video, iframe { max-width: 100%; height: auto; }
+.no-scroll-x { overflow-x: hidden; }

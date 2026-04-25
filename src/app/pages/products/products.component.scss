@@ -1,0 +1,66 @@
+.page-eyebrow {
+  display: inline-block;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #efc94c;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin-bottom: 0.4rem;
+}
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+@media (min-width: 768px) {
+  .filter-bar { grid-template-columns: 1fr auto; align-items: center; }
+}
+
+.search-wrap { position: relative; }
+.search-wrap i {
+  position: absolute;
+  left: 1rem; top: 50%; transform: translateY(-50%);
+  color: #efc94c;
+  pointer-events: none;
+}
+.search-wrap input { padding-left: 2.6rem !important; }
+
+.cat-pills {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+.cat-pill {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.04);
+  color: #d4d4d4;
+  border: 1px solid rgba(212,160,23,0.25);
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+.cat-pill:hover { color: #efc94c; border-color: #efc94c; }
+.cat-pill.active {
+  background: linear-gradient(135deg, #efc94c 0%, #d4a017 100%);
+  color: #0a0a0a;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+@media (max-width: 575.98px) {
+  .page-title { font-size: 1.7rem; }
+  .filter-bar { gap: 0.55rem; }
+  .cat-pill { padding: 0.4rem 0.85rem; font-size: 0.78rem; }
+  .search-wrap input { padding: 0.6rem 0.85rem 0.6rem 2.4rem !important; font-size: 0.92rem !important; }
+}

@@ -1,0 +1,156 @@
+<section class="container py-4 py-md-5">
+  <div class="text-center mb-4">
+    <span class="page-eyebrow">Final Step</span>
+    <h1 class="page-title gold-gradient-text">Checkout</h1>
+  </div>
+
+  <!-- Stepper -->
+  <div class="stepper mb-4">
+    <div class="step" [class.active]="step() >= 1"><span>1</span> Details</div>
+    <div class="line" [class.active]="step() >= 2"></div>
+    <div class="step" [class.active]="step() >= 2"><span>2</span> Payment</div>
+    <div class="line" [class.active]="step() >= 3"></div>
+    <div class="step" [class.active]="step() >= 3"><span>3</span> Confirmed</div>
+  </div>
+
+  <!-- STEP 1 — details -->
+  <ng-container *ngIf="step() === 1">
+    <div class="row g-4">
+      <div class="col-12 col-lg-7">
+        <div class="form-card">
+          <h5 class="mb-3">Delivery Details</h5>
+          <form #f="ngForm" (ngSubmit)="goToPayment(f)" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Full Name *</label>
+              <input class="form-control" name="name" required minlength="2"
+                     [(ngModel)]="details.name" #name="ngModel">
+              <small class="text-danger" *ngIf="name.touched && name.invalid">Name is required</small>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Phone *</label>
+                <input class="form-control" name="phone" required pattern="^[6-9][0-9]{9}$"
+                       [(ngModel)]="details.phone" #phone="ngModel"
+                       placeholder="10-digit number">
+                <small class="text-danger" *ngIf="phone.touched && phone.invalid">Enter a valid 10-digit phone</small>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Email (optional)</label>
+                <input class="form-control" name="email" type="email" [(ngModel)]="details.email">
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label class="form-label">Delivery Address *</label>
+              <textarea class="form-control" rows="3" name="address" required minlength="10"
+                        [(ngModel)]="details.address" #addr="ngModel"
+                        placeholder="House / Flat, Street, City, State, PIN"></textarea>
+              <small class="text-danger" *ngIf="addr.touched && addr.invalid">Please enter complete address</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Notes (optional)</label>
+              <textarea class="form-control" rows="2" name="notes" [(ngModel)]="details.notes"
+                        placeholder="Any special instructions?"></textarea>
+            </div>
+
+            <div class="alert-error" *ngIf="error()">{{ error() }}</div>
+
+            <button type="submit" class="btn-gold w-100 justify-content-center mt-2">
+              Continue to Payment <i class="bi bi-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <ng-container *ngTemplateOutlet="orderSummary"></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- STEP 2 — Payment -->
+  <ng-container *ngIf="step() === 2">
+    <div class="row g-4">
+      <div class="col-12 col-lg-7">
+        <div class="form-card text-center">
+          <h5 class="mb-3">Pay via UPI</h5>
+          <p class="text-muted-light mb-4">
+            Scan the QR or pay to the UPI ID below using any UPI app
+            (Google Pay, PhonePe, Paytm, etc.) for ₹{{ cart.total() | number }}.
+          </p>
+
+          <div class="qr-box mx-auto mb-3">
+            <img [src]="payment.qrImagePath" alt="UPI QR" loading="lazy"
+                 onerror="this.style.display='none'">
+            <div class="qr-fallback">
+              <i class="bi bi-qr-code"></i>
+              <small class="d-block">Add your UPI QR at:<br><code>src/assets/payment-qr.png</code></small>
+            </div>
+          </div>
+
+          <div class="upi-id">
+            <span>UPI ID</span>
+            <strong>{{ payment.upiId }}</strong>
+          </div>
+
+          <a [href]="upiUrl" class="btn-outline-gold mt-3 mb-2">
+            <i class="bi bi-phone"></i> Open in UPI App
+          </a>
+
+          <p class="small text-muted-light mt-3 mb-0">
+            After paying, click below to confirm. Your order will be marked
+            <strong>Pending</strong> until verified by our team.
+          </p>
+
+          <div class="alert-error mt-3" *ngIf="error()">{{ error() }}</div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button class="btn-outline-gold flex-grow-1" (click)="step.set(1)" [disabled]="submitting()">
+              <i class="bi bi-arrow-left"></i> Back
+            </button>
+            <button class="btn-gold flex-grow-1" (click)="confirmPaid()" [disabled]="submitting()">
+              <span *ngIf="!submitting()"><i class="bi bi-check2-circle"></i> I Have Paid</span>
+              <span *ngIf="submitting()">Placing order…</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <ng-container *ngTemplateOutlet="orderSummary"></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- STEP 3 — Success -->
+  <ng-container *ngIf="step() === 3">
+    <div class="success-card text-center mx-auto">
+      <i class="bi bi-check-circle-fill text-success"></i>
+      <h2 class="mt-3 mb-2 gold-gradient-text">Thank you!</h2>
+      <p class="text-muted-light mb-2">
+        Your order has been placed successfully. We'll verify the payment shortly.
+      </p>
+      <p class="order-id mb-4">
+        Order ID: <strong>{{ orderId() }}</strong>
+      </p>
+      <a routerLink="/" class="btn-gold">Back to Home</a>
+    </div>
+  </ng-container>
+</section>
+
+<ng-template #orderSummary>
+  <div class="summary-card">
+    <h5 class="mb-3">Order Summary</h5>
+    <div class="summary-line" *ngFor="let item of cart.cart()">
+      <span class="text-muted-light">{{ item.name }} × {{ item.quantity }}</span>
+      <span>₹{{ item.price * item.quantity | number }}</span>
+    </div>
+    <hr class="border-secondary">
+    <div class="d-flex justify-content-between">
+      <span>Total</span>
+      <span class="gold-gradient-text fw-bold fs-5">₹{{ cart.total() | number }}</span>
+    </div>
+  </div>
+</ng-template>

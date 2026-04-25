@@ -1,0 +1,49 @@
+<div class="admin-shell" [class.sidebar-open]="sidebarOpen">
+  <aside class="admin-sidebar">
+    <a routerLink="/" class="admin-brand">
+      <span>CC</span>
+      <strong>{{ brand.name }}</strong>
+    </a>
+
+    <nav class="admin-nav">
+      <a routerLink="products" routerLinkActive="active" (click)="closeSidebar()">
+        <i class="bi bi-bag"></i> Products
+      </a>
+      <a routerLink="orders" routerLinkActive="active" (click)="closeSidebar()">
+        <i class="bi bi-receipt"></i> Orders
+      </a>
+      <a routerLink="messages" routerLinkActive="active" (click)="closeSidebar()">
+        <i class="bi bi-chat-dots"></i> Messages
+      </a>
+    </nav>
+
+    <div class="admin-user mt-auto">
+      <div class="user-info">
+        <i class="bi bi-person-circle"></i>
+        <div class="small">
+          <div class="text-truncate">{{ auth.user()?.email || 'Admin' }}</div>
+          <small class="text-muted-light">Administrator</small>
+        </div>
+      </div>
+      <button class="btn-logout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Sign out
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-topbar d-lg-none">
+      <button class="ham" (click)="toggleSidebar()" aria-label="Menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <strong>Admin Panel</strong>
+      <a routerLink="/" class="text-gold small text-decoration-none">View Site</a>
+    </header>
+
+    <div class="admin-content p-3 p-md-4">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <div class="sidebar-backdrop d-lg-none" (click)="closeSidebar()"></div>
+</div>

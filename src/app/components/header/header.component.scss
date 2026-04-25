@@ -1,0 +1,183 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(14px);
+  background: rgba(10, 10, 10, 0.85);
+  border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  transition: opacity 0.2s ease;
+}
+.brand:hover { opacity: 0.92; }
+
+/* Double-ring jewellery monogram */
+.brand-mark {
+  position: relative;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, #fbe28a 0%, #efc94c 35%, #d4a017 70%, #92611d 100%);
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow:
+    0 6px 16px -4px rgba(212,160,23,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.45),
+    inset 0 -2px 4px rgba(0,0,0,0.25);
+}
+.brand-mark::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 1px solid rgba(10,10,10,0.35);
+  pointer-events: none;
+}
+.brand-mark::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,160,23,0.35);
+  pointer-events: none;
+}
+.mark-glyph {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1a1a0a;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  z-index: 1;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+}
+
+.brand-text { line-height: 1.05; }
+.brand-name {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #f5f5f5;
+  background: linear-gradient(180deg, #ffffff 0%, #efc94c 130%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+.brand-tagline {
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  font-size: 0.85rem;
+  color: #efc94c;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+@media (max-width: 991.98px) {
+  .brand-mark { width: 42px; height: 42px; }
+  .brand-name { font-size: 0.95rem; letter-spacing: 0.18em; }
+  .brand-tagline { font-size: 0.78rem; }
+}
+@media (max-width: 575.98px) {
+  .site-header .container-fluid { padding: 0.6rem 0.85rem !important; }
+  .brand { gap: 0.5rem; }
+  .brand-mark { width: 38px; height: 38px; }
+  .mark-glyph { font-size: 0.8rem; }
+  .cart-icon, .hamburger { width: 38px; height: 38px; font-size: 1.05rem; border-radius: 9px; }
+}
+@media (max-width: 360px) {
+  .brand-mark { width: 34px; height: 34px; }
+  .mark-glyph { font-size: 0.72rem; }
+  .cart-icon, .hamburger { width: 36px; height: 36px; }
+  .site-header .container-fluid { padding: 0.5rem 0.65rem !important; }
+}
+
+.primary-nav a {
+  color: #d4d4d4;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.25s ease;
+}
+.primary-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 1px;
+  background: #d4a017;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.primary-nav a:hover, .primary-nav a.active { color: #efc94c; }
+.primary-nav a:hover::after, .primary-nav a.active::after { transform: scaleX(1); }
+
+.cart-icon {
+  width: 42px; height: 42px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  color: #efc94c;
+  border: 1px solid rgba(212,160,23,0.3);
+  text-decoration: none;
+  font-size: 1.15rem;
+  transition: all 0.2s ease;
+}
+.cart-icon:hover { background: rgba(212,160,23,0.15); color: #efc94c; }
+
+.cart-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: #d4a017;
+  color: #0a0a0a;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-grid;
+  place-items: center;
+}
+
+.hamburger {
+  background: transparent;
+  border: 1px solid rgba(212,160,23,0.3);
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  color: #efc94c;
+  font-size: 1.2rem;
+}
+
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.mobile-menu.open { max-height: 320px; }
+.mobile-menu a {
+  padding: 0.85rem 1rem;
+  color: #e5e5e5;
+  text-decoration: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,160,23,0.15);
+  font-weight: 500;
+}
+.mobile-menu a.active { color: #efc94c; border-color: #d4a017; }
