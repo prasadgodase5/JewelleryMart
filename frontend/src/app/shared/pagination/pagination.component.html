@@ -1,0 +1,18 @@
+<div class="pager" *ngIf="totalPages > 1">
+  <span class="pager-info">Page {{ page }} of {{ totalPages }} · {{ total }} items</span>
+  <div class="pager-controls">
+    <button type="button" class="pg-btn"
+            [disabled]="page === 1"
+            (click)="go(page - 1)">Prev</button>
+
+    <button type="button"
+            *ngFor="let p of pages()"
+            class="pg-btn"
+            [class.is-active]="p === page"
+            (click)="go(p)">{{ p }}</button>
+
+    <button type="button" class="pg-btn"
+            [disabled]="page === totalPages"
+            (click)="go(page + 1)">Next</button>
+  </div>
+</div>

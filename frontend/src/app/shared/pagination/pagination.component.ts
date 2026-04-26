@@ -5,19 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-pagination',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div *ngIf="totalPages > 1" class="flex items-center justify-between text-sm mt-3 flex-wrap gap-2">
-      <span class="text-slate-500">Page {{ page }} of {{ totalPages }} · {{ total }} items</span>
-      <div class="flex items-center gap-1">
-        <button class="btn btn-secondary px-3 py-1 text-xs" [disabled]="page===1" (click)="go(page-1)">Prev</button>
-        <button *ngFor="let p of pages()"
-                class="btn px-3 py-1 text-xs"
-                [ngClass]="p===page ? 'btn-primary' : 'btn-secondary'"
-                (click)="go(p)">{{ p }}</button>
-        <button class="btn btn-secondary px-3 py-1 text-xs" [disabled]="page===totalPages" (click)="go(page+1)">Next</button>
-      </div>
-    </div>
-  `
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent {
   @Input() total = 0;
@@ -25,7 +14,9 @@ export class PaginationComponent {
   @Input() pageSize = 10;
   @Output() pageChange = new EventEmitter<number>();
 
-  get totalPages() { return Math.max(1, Math.ceil(this.total / this.pageSize)); }
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.total / this.pageSize));
+  }
 
   pages(): number[] {
     const max = this.totalPages;

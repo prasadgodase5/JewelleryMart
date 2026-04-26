@@ -1,0 +1,59 @@
+<section class="dashboard">
+  <div class="stat-grid">
+    <div class="stat-card" *ngFor="let c of cards()" [ngClass]="c.variant">
+      <div class="stat-icon"><i class="bi {{ c.icon }}"></i></div>
+      <div class="stat-meta">
+        <div class="stat-label">{{ c.label }}</div>
+        <div class="stat-value">{{ c.value }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="app-card recent-orders">
+      <div class="section-head">
+        <h3>Recent Orders</h3>
+        <a routerLink="/orders" class="link-brand">View all</a>
+      </div>
+
+      <div class="table-wrap">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of recent()">
+              <td class="font-medium">#{{ o.id }}</td>
+              <td>{{ o.customer }}</td>
+              <td>₹{{ o.amount }}</td>
+              <td>
+                <span class="app-badge" [ngClass]="badgeClass(o.status)">{{ o.status }}</span>
+              </td>
+              <td class="muted">{{ o.createdAt | date:'short' }}</td>
+            </tr>
+            <tr *ngIf="!recent().length">
+              <td colspan="5" class="empty">No orders yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="app-card quick-actions">
+      <h3>Quick Actions</h3>
+      <div class="action-list">
+        <a routerLink="/products"   class="app-btn app-btn-secondary"><i class="bi bi-box-seam"></i> Manage Products</a>
+        <a routerLink="/categories" class="app-btn app-btn-secondary"><i class="bi bi-tags"></i> Manage Categories</a>
+        <a routerLink="/orders"     class="app-btn app-btn-secondary"><i class="bi bi-receipt"></i> View Orders</a>
+        <a routerLink="/users"      class="app-btn app-btn-secondary"><i class="bi bi-people"></i> Manage Users</a>
+        <a routerLink="/checkout"   class="app-btn app-btn-primary"><i class="bi bi-credit-card-2-front"></i> Test UPI Checkout</a>
+      </div>
+    </div>
+  </div>
+</section>

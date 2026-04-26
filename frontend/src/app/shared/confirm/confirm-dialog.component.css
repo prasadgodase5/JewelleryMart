@@ -1,0 +1,31 @@
+.confirm-panel { max-width: 28rem; }
+
+.confirm-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+.confirm-header i { font-size: 1.25rem; color: #f59e0b; }
+.confirm-header h3 {
+  font-size: 1.05rem;
+  margin: 0;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.confirm-body {
+  padding: 1rem 1.25rem;
+  font-size: .9rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.confirm-footer {
+  padding: .75rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+}

@@ -1,0 +1,31 @@
+.categories-page { display: flex; flex-direction: column; gap: 1rem; }
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+.page-head h2 { margin: 0; font-size: 1.25rem; font-weight: 600; color: #1e293b; }
+
+.search-input { max-width: 24rem; margin-bottom: .75rem; }
+
+.table-wrap { overflow-x: auto; }
+.font-medium { font-weight: 500; }
+.muted { color: #475569; }
+.empty { text-align: center; color: #94a3b8; padding: 2rem 0; }
+
+.actions { white-space: nowrap; }
+.actions .app-btn { padding: .35rem .65rem; font-size: .8rem; }
+.danger-text { color: #dc2626; }
+.danger-text:hover { background: #fef2f2; }
+
+/* Form */
+.form-stack { display: flex; flex-direction: column; gap: .9rem; }
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  padding-top: .25rem;
+}

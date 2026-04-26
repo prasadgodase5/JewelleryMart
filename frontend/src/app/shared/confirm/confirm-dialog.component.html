@@ -1,0 +1,15 @@
+<div class="app-modal-backdrop"
+     *ngIf="confirm.current() as c"
+     (click)="confirm.resolve(false)">
+  <div class="app-modal-panel confirm-panel" (click)="$event.stopPropagation()">
+    <div class="confirm-header">
+      <i class="bi bi-exclamation-triangle text-warning"></i>
+      <h3>{{ c.title }}</h3>
+    </div>
+    <div class="confirm-body">{{ c.message }}</div>
+    <div class="confirm-footer">
+      <button class="app-btn app-btn-secondary" (click)="confirm.resolve(false)">{{ c.cancelLabel }}</button>
+      <button class="app-btn app-btn-danger"   (click)="confirm.resolve(true)">{{ c.confirmLabel }}</button>
+    </div>
+  </div>
+</div>

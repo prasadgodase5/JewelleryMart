@@ -1,0 +1,18 @@
+<div class="toast-stack">
+  <div *ngFor="let t of toast.toasts()"
+       class="toast-card"
+       [ngClass]="'toast-' + t.kind"
+       role="alert">
+    <span class="toast-icon">
+      <i class="bi"
+         [ngClass]="{
+           'bi-check-circle-fill': t.kind === 'success',
+           'bi-x-octagon-fill':    t.kind === 'error',
+           'bi-info-circle-fill':  t.kind === 'info',
+           'bi-exclamation-triangle-fill': t.kind === 'warn'
+         }"></i>
+    </span>
+    <span class="toast-msg">{{ t.message }}</span>
+    <button class="toast-close" (click)="toast.dismiss(t.id)" aria-label="Dismiss">×</button>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<section class="orders-page">
+  <div class="page-head">
+    <h2>Orders</h2>
+    <a routerLink="/checkout" class="app-btn app-btn-primary">
+      <i class="bi bi-credit-card-2-front"></i> New UPI Checkout
+    </a>
+  </div>
+
+  <div class="app-card">
+    <div class="filter-bar">
+      <input class="app-input" placeholder="Search by customer or ID…"
+             [value]="search()"
+             (input)="setSearch($any($event.target).value)" />
+      <select class="app-input"
+              [value]="statusFilter()"
+              (change)="setStatusFilter($any($event.target).value)">
+        <option value="">All statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Paid">Paid</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Expired">Expired</option>
+      </select>
+      <select class="app-input"
+              [value]="sortBy()"
+              (change)="setSort($any($event.target).value)">
+        <option value="newest">Sort: Newest</option>
+        <option value="oldest">Sort: Oldest</option>
+        <option value="amountDesc">Sort: Amount ↓</option>
+        <option value="amountAsc">Sort: Amount ↑</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="app-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Mode</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of paged()">
+            <td class="font-medium">#{{ o.id }}</td>
+            <td>{{ o.customer }}</td>
+            <td>₹{{ o.amount }}</td>
+            <td>{{ o.paymentMode || '—' }}</td>
+            <td>
+              <select class="app-input status-select"
+                      [value]="o.status"
+                      [ngClass]="statusBg(o.status)"
+                      (change)="changeStatus(o, $any($event.target).value)">
+                <option value="Pending">Pending</option>
+                <option value="Paid">Paid</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Expired">Expired</option>
+              </select>
+            </td>
+            <td class="muted">{{ o.createdAt | date:'short' }}</td>
+            <td class="text-end actions">
+              <a [routerLink]="['/checkout', o.id]" class="app-btn app-btn-ghost">
+                <i class="bi bi-credit-card"></i> UPI
+              </a>
+              <button type="button" class="app-btn app-btn-ghost danger-text" (click)="remove(o)">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="!paged().length">
+            <td colspan="7" class="empty">No orders</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [total]="filtered().length"
+      [page]="page()"
+      [pageSize]="pageSize"
+      (pageChange)="page.set($event)"></app-pagination>
+  </div>
+</section>

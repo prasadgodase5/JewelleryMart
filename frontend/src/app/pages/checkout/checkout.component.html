@@ -1,0 +1,95 @@
+<section class="checkout-page">
+  <h2>UPI Checkout</h2>
+
+  <!-- Step 1: create order -->
+  <div *ngIf="!order()" class="app-card">
+    <p class="hint">
+      Create a new order to generate a UPI QR, or open an existing pending order from the
+      <a routerLink="/orders" class="link-brand">Orders page</a>.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="createOrder()" novalidate class="create-form">
+      <div>
+        <label class="app-label">Customer Name<span class="req">*</span></label>
+        <input type="text" class="app-input" formControlName="customer"
+               placeholder="Customer name"
+               [class.is-invalid]="hasError('customer')" />
+        <p class="error-msg" *ngIf="hasError('customer', 'required')">Customer name is required.</p>
+        <p class="error-msg" *ngIf="hasError('customer', 'minlength')">At least 2 characters required.</p>
+        <p class="error-msg" *ngIf="hasError('customer', 'maxlength')">Maximum 60 characters allowed.</p>
+      </div>
+
+      <div>
+        <label class="app-label">Amount (₹)<span class="req">*</span></label>
+        <input type="number" min="1" class="app-input" formControlName="amount"
+               [class.is-invalid]="hasError('amount')" />
+        <p class="error-msg" *ngIf="hasError('amount', 'required')">Amount is required.</p>
+        <p class="error-msg" *ngIf="hasError('amount', 'min')">Amount must be at least ₹1.</p>
+        <p class="error-msg" *ngIf="hasError('amount', 'max')">Amount too large.</p>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/orders" class="app-btn app-btn-secondary">Cancel</a>
+        <button type="submit" class="app-btn app-btn-primary">
+          <i class="bi bi-qr-code"></i> Generate UPI QR
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Step 2: QR + countdown -->
+  <div *ngIf="order() as o" class="app-card payment-card">
+    <div class="pay-grid">
+      <div class="pay-info">
+        <div class="muted">Order #</div>
+        <div class="order-line">#{{ o.id }} · {{ o.customer }}</div>
+
+        <div class="amount-box">
+          <div class="amount-label">Total Amount</div>
+          <div class="amount-value">₹{{ o.amount }}</div>
+        </div>
+
+        <div class="instructions">
+          <p class="title">How to pay</p>
+          <ol>
+            <li>Scan the QR using any UPI app (GPay, PhonePe, Paytm)</li>
+            <li>Complete the payment</li>
+            <li>Tap <strong>"I Have Paid"</strong> below</li>
+          </ol>
+        </div>
+
+        <div class="timer-box"
+             [ngClass]="expired() ? 'timer-expired' : 'timer-running'">
+          <div>
+            <div class="timer-label">Time remaining</div>
+            <div class="timer-value">{{ mmss() }}</div>
+          </div>
+          <span class="app-badge" [ngClass]="paidBadgeClass()">{{ o.status }}</span>
+        </div>
+
+        <div class="action-row">
+          <button type="button"
+                  class="app-btn app-btn-primary"
+                  [disabled]="o.status === 'Paid' || expired()"
+                  (click)="confirmPaid()">
+            <i class="bi bi-check2-circle"></i> I Have Paid
+          </button>
+          <button type="button" class="app-btn app-btn-secondary" (click)="reset()">
+            <i class="bi bi-arrow-counterclockwise"></i> New Order
+          </button>
+          <a routerLink="/orders" class="app-btn app-btn-ghost">
+            <i class="bi bi-arrow-left"></i> Back to Orders
+          </a>
+        </div>
+      </div>
+
+      <div class="qr-pane">
+        <div class="qr-card">
+          <img *ngIf="qrDataUrl()" [src]="qrDataUrl()" alt="UPI QR" class="qr-img" />
+          <div *ngIf="!qrDataUrl()" class="qr-placeholder">Generating…</div>
+        </div>
+        <div class="upi-uri">{{ upiUri() }}</div>
+      </div>
+    </div>
+  </div>
+</section>

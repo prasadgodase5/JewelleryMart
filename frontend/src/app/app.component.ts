@@ -8,12 +8,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, ToastContainerComponent, LoaderComponent],
-  template: `
-    <app-layout>
-      <router-outlet></router-outlet>
-    </app-layout>
-    <app-toast-container></app-toast-container>
-    <app-loader></app-loader>
-  `
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {}

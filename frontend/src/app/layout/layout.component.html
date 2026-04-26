@@ -1,0 +1,56 @@
+<div class="layout-shell">
+  <aside class="sidebar"
+         [class.is-open]="sidebarOpen()"
+         [class.is-mobile]="isSmall()">
+    <div class="sidebar-brand">
+      <div class="brand-logo">U</div>
+      <div class="brand-text">
+        <div class="brand-title">UNFYD.PIVOT</div>
+        <div class="brand-subtitle">Admin Panel</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a *ngFor="let item of nav"
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         (click)="closeOnMobile()"
+         class="sidebar-link">
+        <i class="bi {{ item.icon }}"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      v1.0 · {{ today | date:'mediumDate' }}
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop"
+       *ngIf="sidebarOpen() && isSmall()"
+       (click)="sidebarOpen.set(false)"></div>
+
+  <div class="main-pane">
+    <header class="topbar">
+      <button class="app-btn app-btn-ghost menu-toggle"
+              (click)="toggleSidebar()"
+              aria-label="Toggle menu">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <div class="topbar-title">
+        <h1>Admin Dashboard</h1>
+        <p>Manage products, categories, orders and users</p>
+      </div>
+      <div class="topbar-user">
+        <div class="user-avatar">A</div>
+        <span class="user-name">Admin</span>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <ng-content></ng-content>
+    </main>
+  </div>
+</div>
+
+<app-confirm-dialog></app-confirm-dialog>
