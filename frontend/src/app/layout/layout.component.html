@@ -3,15 +3,17 @@
          [class.is-open]="sidebarOpen()"
          [class.is-mobile]="isSmall()">
     <div class="sidebar-brand">
-      <div class="brand-logo">U</div>
+      <div class="brand-logo">
+        <i class="bi bi-bag-heart-fill"></i>
+      </div>
       <div class="brand-text">
-        <div class="brand-title">UNFYD.PIVOT</div>
-        <div class="brand-subtitle">Admin Panel</div>
+        <div class="brand-title">PG E-Mart</div>
+        <div class="brand-subtitle">{{ auth.role() === 'admin' ? 'Admin Console' : 'Shop Smart' }}</div>
       </div>
     </div>
 
     <nav class="sidebar-nav">
-      <a *ngFor="let item of nav"
+      <a *ngFor="let item of nav()"
          [routerLink]="item.route"
          routerLinkActive="active"
          (click)="closeOnMobile()"
@@ -22,7 +24,11 @@
     </nav>
 
     <div class="sidebar-footer">
-      v1.0 · {{ today | date:'mediumDate' }}
+      <button type="button" class="sidebar-logout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Sign Out</span>
+      </button>
+      <div class="sidebar-version">v1.0 · {{ today | date:'mediumDate' }}</div>
     </div>
   </aside>
 
@@ -32,18 +38,43 @@
 
   <div class="main-pane">
     <header class="topbar">
-      <button class="app-btn app-btn-ghost menu-toggle"
+      <button type="button"
+              class="app-btn app-btn-ghost menu-toggle"
               (click)="toggleSidebar()"
               aria-label="Toggle menu">
-        <i class="bi bi-list fs-4"></i>
+        <i class="bi bi-list"></i>
       </button>
+
       <div class="topbar-title">
-        <h1>Admin Dashboard</h1>
-        <p>Manage products, categories, orders and users</p>
+        <h1>{{ pageTitle() }}</h1>
+        <p>{{ pageSubtitle() }}</p>
       </div>
-      <div class="topbar-user">
-        <div class="user-avatar">A</div>
-        <span class="user-name">Admin</span>
+
+      <div class="user-menu-wrap">
+        <button type="button" class="user-trigger" (click)="toggleUserMenu()">
+          <div class="user-avatar">{{ initial() }}</div>
+          <div class="user-meta">
+            <span class="user-name">{{ auth.username() }}</span>
+            <span class="user-role-badge"
+                  [ngClass]="auth.role() === 'admin' ? 'role-admin' : 'role-user'">
+              {{ auth.role() }}
+            </span>
+          </div>
+          <i class="bi bi-chevron-down user-caret"></i>
+        </button>
+
+        <div class="user-menu" *ngIf="userMenuOpen()">
+          <div class="um-header">
+            <div class="um-avatar">{{ initial() }}</div>
+            <div>
+              <div class="um-name">{{ auth.username() }}</div>
+              <div class="um-phone">📱 {{ auth.phone() }}</div>
+            </div>
+          </div>
+          <button type="button" class="um-item danger" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i> Sign Out
+          </button>
+        </div>
       </div>
     </header>
 

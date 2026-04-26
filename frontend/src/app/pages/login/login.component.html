@@ -1,0 +1,71 @@
+<div class="login-page">
+  <div class="login-bg"></div>
+
+  <div class="login-card" [class.is-admin]="role() === 'admin'">
+    <a routerLink="/" class="back-link" aria-label="Back to home">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+
+    <div class="login-header">
+      <div class="login-logo">
+        <i class="bi bi-bag-heart-fill"></i>
+      </div>
+      <h2>PG E-Mart</h2>
+      <p class="role-pill">
+        <i class="bi" [ngClass]="role() === 'admin' ? 'bi-shield-lock-fill' : 'bi-person-circle'"></i>
+        {{ roleLabel() }} Sign In
+      </p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="login-form">
+      <div class="form-row">
+        <label class="app-label">Username<span class="req">*</span></label>
+        <div class="input-wrap">
+          <i class="bi bi-person input-icon"></i>
+          <input type="text" class="app-input with-icon" formControlName="username"
+                 placeholder="Enter your username"
+                 autocomplete="username"
+                 [class.is-invalid]="hasError('username')" />
+        </div>
+        <p class="error-msg" *ngIf="hasError('username', 'required')">Username is required.</p>
+        <p class="error-msg" *ngIf="hasError('username', 'minlength')">At least 3 characters required.</p>
+        <p class="error-msg" *ngIf="hasError('username', 'maxlength')">Maximum 40 characters allowed.</p>
+      </div>
+
+      <div class="form-row">
+        <label class="app-label">Password<span class="req">*</span></label>
+        <div class="input-wrap">
+          <i class="bi bi-lock input-icon"></i>
+          <input [type]="showPassword() ? 'text' : 'password'"
+                 class="app-input with-icon with-trailing"
+                 formControlName="password"
+                 placeholder="Enter your password"
+                 autocomplete="current-password"
+                 [class.is-invalid]="hasError('password')" />
+          <button type="button" class="trailing-btn" (click)="togglePassword()" aria-label="Toggle password">
+            <i class="bi" [ngClass]="showPassword() ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <p class="error-msg" *ngIf="hasError('password', 'required')">Password is required.</p>
+        <p class="error-msg" *ngIf="hasError('password', 'minlength')">At least 4 characters required.</p>
+      </div>
+
+      <div class="auth-error" *ngIf="errorMsg()">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>{{ errorMsg() }}</span>
+      </div>
+
+      <button type="submit" class="login-submit">
+        <i class="bi bi-box-arrow-in-right"></i>
+        Sign In as {{ roleLabel() }}
+      </button>
+
+      <div class="hint-box">
+        <span class="hint-label">Demo Credentials</span>
+        <div class="hint-creds">
+          <code>prasad</code> · <code>9604</code>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

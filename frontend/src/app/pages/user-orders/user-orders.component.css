@@ -1,0 +1,99 @@
+.user-orders-page { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: .75rem;
+}
+.page-head h2 { margin: 0; font-size: 1.35rem; font-weight: 700; color: #1e293b; }
+.muted { color: #64748b; font-size: .85rem; margin: .15rem 0 0; }
+
+/* Summary cards */
+.summary-bar {
+  display: grid;
+  gap: .85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 768px) { .summary-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.summary-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #6366f1;
+  border-radius: .65rem;
+  padding: .85rem 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.summary-card.sc-success { border-left-color: #10b981; }
+.summary-card.sc-warn    { border-left-color: #f59e0b; }
+.sc-label { font-size: .7rem; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+.sc-value { font-size: 1.4rem; font-weight: 700; color: #1e293b; margin-top: .15rem; }
+
+.filter-row { display: flex; }
+.filter-select { max-width: 14rem; }
+
+/* Order cards */
+.orders-list { display: flex; flex-direction: column; gap: .75rem; }
+
+.order-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: .75rem;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  transition: border-color .15s, box-shadow .15s;
+}
+.order-card:hover { border-color: #c7d2fe; box-shadow: 0 6px 14px rgba(15,23,42,.07); }
+
+.oc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #e2e8f0;
+  padding-bottom: .55rem;
+  margin-bottom: .55rem;
+}
+.oc-id { font-weight: 700; color: #1e293b; }
+.oc-date { font-size: .75rem; color: #64748b; }
+
+.oc-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+}
+.oc-amount {
+  font-size: 1.45rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4338ca, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.oc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .85rem;
+  font-size: .8rem;
+  color: #475569;
+  margin-top: .25rem;
+}
+.oc-meta i { color: #6366f1; margin-right: .15rem; }
+
+.oc-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.danger-text { color: #dc2626; }
+.danger-text:hover { background: #fef2f2; }
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  background: #fff;
+  border: 1px dashed #e2e8f0;
+  border-radius: .75rem;
+  color: #64748b;
+}
+.empty-state i { font-size: 3rem; display: block; margin-bottom: .5rem; color: #cbd5e1; }
+.empty-state p { margin: 0 0 1rem; }

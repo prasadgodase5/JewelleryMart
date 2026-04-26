@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import * as QRCode from 'qrcode';
 import { ApiService } from '../../core/api.service';
 import { ToastService } from '../../core/toast.service';
+import { AuthService } from '../../core/auth.service';
 import { Order } from '../../models/models';
 
 @Component({
@@ -19,14 +20,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private toast = inject(ToastService);
+  auth = inject(AuthService);
 
-  payeeVpa = 'merchant@upi';
-  payeeName = 'UNFYD Store';
+  payeeVpa = 'pgemart@upi';
+  payeeName = 'PG E-Mart';
 
   form: FormGroup = this.fb.group({
-    customer: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
+    customer: [this.auth.username() || '', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
     amount:   [100, [Validators.required, Validators.min(1), Validators.max(1_000_000)]]
   });
+
+  ordersBackLink = computed<string>(() =>
+    this.auth.role() === 'admin' ? '/admin/orders' : '/user/orders'
+  );
 
   submitted = signal<boolean>(false);
   order = signal<Order | null>(null);
@@ -166,7 +172,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.qrDataUrl.set('');
     this.submitted.set(false);
     this.stopTimer();
-    this.form.reset({ customer: '', amount: 100 });
+    this.form.reset({ customer: this.auth.username() || '', amount: 100 });
   }
 
   paidBadgeClass(): string {

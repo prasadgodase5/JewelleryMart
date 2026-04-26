@@ -5,7 +5,7 @@
   <div *ngIf="!order()" class="app-card">
     <p class="hint">
       Create a new order to generate a UPI QR, or open an existing pending order from the
-      <a routerLink="/orders" class="link-brand">Orders page</a>.
+      <a [routerLink]="ordersBackLink()" class="link-brand">Orders page</a>.
     </p>
 
     <form [formGroup]="form" (ngSubmit)="createOrder()" novalidate class="create-form">
@@ -29,7 +29,7 @@
       </div>
 
       <div class="form-actions">
-        <a routerLink="/orders" class="app-btn app-btn-secondary">Cancel</a>
+        <a [routerLink]="ordersBackLink()" class="app-btn app-btn-secondary">Cancel</a>
         <button type="submit" class="app-btn app-btn-primary">
           <i class="bi bi-qr-code"></i> Generate UPI QR
         </button>
@@ -77,7 +77,7 @@
           <button type="button" class="app-btn app-btn-secondary" (click)="reset()">
             <i class="bi bi-arrow-counterclockwise"></i> New Order
           </button>
-          <a routerLink="/orders" class="app-btn app-btn-ghost">
+          <a [routerLink]="ordersBackLink()" class="app-btn app-btn-ghost">
             <i class="bi bi-arrow-left"></i> Back to Orders
           </a>
         </div>

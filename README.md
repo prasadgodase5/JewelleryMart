@@ -1,4 +1,4 @@
-# Mini E-commerce Admin Panel
+# PG E-Mart — Mini E-commerce Admin Panel
 
 A complete Mini E-commerce Admin Panel built with **Angular 17 (standalone)** + **Node.js/Express** with a JSON file as the data store. Includes a simulated **UPI QR Code Payment** flow.
 

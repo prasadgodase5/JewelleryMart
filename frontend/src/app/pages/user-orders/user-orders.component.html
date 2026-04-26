@@ -1,0 +1,84 @@
+<section class="user-orders-page">
+  <div class="page-head">
+    <div>
+      <h2>My Orders</h2>
+      <p class="muted">All purchases placed by <strong>{{ username() }}</strong></p>
+    </div>
+    <a routerLink="/user/shop" class="app-btn app-btn-primary">
+      <i class="bi bi-shop"></i> Continue Shopping
+    </a>
+  </div>
+
+  <div class="summary-bar">
+    <div class="summary-card">
+      <div class="sc-label">Total Orders</div>
+      <div class="sc-value">{{ myOrders().length }}</div>
+    </div>
+    <div class="summary-card sc-success">
+      <div class="sc-label">Total Spent</div>
+      <div class="sc-value">₹{{ totalSpent() }}</div>
+    </div>
+    <div class="summary-card sc-warn">
+      <div class="sc-label">Pending Payment</div>
+      <div class="sc-value">{{ pendingCount() }}</div>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <select class="app-input filter-select"
+            [value]="filterStatus()"
+            (change)="setFilter($any($event.target).value)">
+      <option value="">All statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="Paid">Paid</option>
+      <option value="Shipped">Shipped</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Expired">Expired</option>
+    </select>
+  </div>
+
+  <div class="orders-list" *ngIf="myOrders().length; else emptyTpl">
+    <div class="order-card" *ngFor="let o of myOrders()">
+      <div class="oc-head">
+        <div>
+          <div class="oc-id">#{{ o.id }}</div>
+          <div class="oc-date">{{ o.createdAt | date:'medium' }}</div>
+        </div>
+        <span class="app-badge" [ngClass]="badgeClass(o.status)">{{ o.status }}</span>
+      </div>
+
+      <div class="oc-body">
+        <div class="oc-info">
+          <div class="oc-amount">₹{{ o.amount }}</div>
+          <div class="oc-meta">
+            <span><i class="bi bi-bag"></i> {{ o.items.length }} item{{ o.items.length === 1 ? '' : 's' }}</span>
+            <span><i class="bi bi-credit-card"></i> {{ o.paymentMode || 'UPI' }}</span>
+          </div>
+        </div>
+        <div class="oc-actions">
+          <a *ngIf="isPayable(o)"
+             [routerLink]="['/user/checkout', o.id]"
+             class="app-btn app-btn-primary">
+            <i class="bi bi-qr-code"></i> Pay Now
+          </a>
+          <button *ngIf="isPayable(o)"
+                  type="button"
+                  class="app-btn app-btn-ghost danger-text"
+                  (click)="cancel(o)">
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyTpl>
+    <div class="empty-state">
+      <i class="bi bi-bag"></i>
+      <p>You haven't placed any orders yet.</p>
+      <a routerLink="/user/shop" class="app-btn app-btn-primary">
+        <i class="bi bi-shop"></i> Start Shopping
+      </a>
+    </div>
+  </ng-template>
+</section>

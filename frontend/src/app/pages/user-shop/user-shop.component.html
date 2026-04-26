@@ -1,0 +1,72 @@
+<section class="shop-page">
+  <div class="hero">
+    <div class="hero-left">
+      <h2>Hello, {{ username() }} 👋</h2>
+      <p>Discover products you love and check out instantly via UPI.</p>
+      <div class="hero-meta">
+        <span class="meta-pill"><i class="bi bi-telephone"></i> {{ phone() }}</span>
+        <a routerLink="/user/orders" class="meta-pill clickable">
+          <i class="bi bi-bag-check"></i> My Orders
+        </a>
+        <a routerLink="/user/add-product" class="meta-pill clickable">
+          <i class="bi bi-plus-circle"></i> List a product
+        </a>
+      </div>
+    </div>
+    <div class="hero-illust">
+      <i class="bi bi-bag-heart-fill"></i>
+    </div>
+  </div>
+
+  <div class="app-card">
+    <div class="filter-bar">
+      <input class="app-input" placeholder="Search products…"
+             [value]="search()"
+             (input)="setSearch($any($event.target).value)" />
+      <select class="app-input"
+              [value]="categoryFilter()"
+              (change)="setCategoryFilter($any($event.target).value)">
+        <option [value]="0">All categories</option>
+        <option *ngFor="let c of categories()" [value]="c.id">{{ c.name }}</option>
+      </select>
+      <select class="app-input"
+              [value]="sortBy()"
+              (change)="setSort($any($event.target).value)">
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+        <option value="priceAsc">Price: Low → High</option>
+        <option value="priceDesc">Price: High → Low</option>
+      </select>
+    </div>
+
+    <div class="product-grid" *ngIf="filtered().length; else emptyTpl">
+      <div class="product-card" *ngFor="let p of filtered()">
+        <div class="product-thumb">
+          <img [src]="p.image || 'https://via.placeholder.com/300x200'" [alt]="p.name" />
+          <span class="app-badge thumb-badge" [ngClass]="stockClass(p.stock)">
+            {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
+          </span>
+        </div>
+        <div class="product-body">
+          <div class="product-cat">{{ catName(p.categoryId) }}</div>
+          <h4 class="product-name">{{ p.name }}</h4>
+          <div class="product-price">₹{{ p.price }}</div>
+          <button type="button"
+                  class="buy-btn"
+                  [disabled]="p.stock <= 0 || buyingId() === p.id"
+                  (click)="buyNow(p)">
+            <i class="bi" [ngClass]="buyingId() === p.id ? 'bi-arrow-repeat spin' : 'bi-lightning-charge-fill'"></i>
+            {{ buyingId() === p.id ? 'Placing…' : 'Buy Now' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyTpl>
+      <div class="empty-state">
+        <i class="bi bi-search"></i>
+        <p>No products match your filters.</p>
+      </div>
+    </ng-template>
+  </div>
+</section>

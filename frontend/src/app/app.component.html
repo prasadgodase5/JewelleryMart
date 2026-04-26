@@ -1,5 +1,12 @@
-<app-layout>
+<ng-container *ngIf="auth.isAuthenticated(); else publicView">
+  <app-layout>
+    <router-outlet></router-outlet>
+  </app-layout>
+</ng-container>
+
+<ng-template #publicView>
   <router-outlet></router-outlet>
-</app-layout>
+</ng-template>
+
 <app-toast-container></app-toast-container>
 <app-loader></app-loader>
