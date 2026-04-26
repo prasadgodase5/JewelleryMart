@@ -183,5 +183,41 @@
 .pay-now-btn:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
 .pay-now-btn:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
 
+.confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem 1.4rem;
+  border: 2px solid #10b981;
+  border-radius: .55rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #047857;
+  background: #ecfdf5;
+  cursor: pointer;
+  transition: background .15s, transform .15s;
+}
+.confirm-btn:hover:not(:disabled) { background: #d1fae5; transform: translateY(-1px); }
+.confirm-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.action-row.secondary { margin-top: .25rem; }
+.action-row.secondary .app-btn { font-size: .85rem; }
+
+.demo-note {
+  margin: 0;
+  font-size: .78rem;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: .45rem;
+  padding: .55rem .75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+}
+.demo-note i { color: #10b981; margin-top: 2px; }
+.demo-note strong { color: #047857; }
+
 .spin { animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }

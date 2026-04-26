@@ -90,15 +90,29 @@
           </div>
         </div>
 
-        <div class="action-row">
+        <div class="action-row" *ngIf="o.status !== 'Paid'">
           <button type="button"
                   class="pay-now-btn"
-                  *ngIf="o.status !== 'Paid'"
                   [disabled]="!paymentEnabled() || expired() || paying()"
                   (click)="payNow()">
             <i class="bi" [ngClass]="paying() ? 'bi-arrow-repeat spin' : 'bi-lightning-charge-fill'"></i>
             {{ paying() ? 'Opening checkout…' : 'Pay ₹' + o.amount + ' via UPI' }}
           </button>
+          <button type="button"
+                  class="confirm-btn"
+                  [disabled]="paying()"
+                  (click)="manualConfirm()">
+            <i class="bi" [ngClass]="paying() ? 'bi-arrow-repeat spin' : 'bi-check2-circle'"></i>
+            Confirm Payment (Demo)
+          </button>
+        </div>
+
+        <p class="demo-note" *ngIf="o.status !== 'Paid'">
+          <i class="bi bi-info-circle"></i>
+          No Razorpay keys configured? Use <strong>Confirm Payment (Demo)</strong> to mark the order as paid for testing. The order will still appear in admin reports.
+        </p>
+
+        <div class="action-row secondary">
           <button type="button" class="app-btn app-btn-secondary" (click)="reset()">
             <i class="bi bi-arrow-counterclockwise"></i> New Order
           </button>

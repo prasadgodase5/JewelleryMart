@@ -250,6 +250,25 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.form.reset({ customer: this.auth.username() || '', amount: 100 });
   }
 
+  manualConfirm(): void {
+    const o = this.order();
+    if (!o) return;
+    if (this.paying()) return;
+    this.paying.set(true);
+    this.api.manualConfirmPayment(o.id!).subscribe({
+      next: updated => {
+        this.order.set(updated);
+        this.stopTimer();
+        this.paying.set(false);
+        this.toast.success('Payment confirmed (demo mode)');
+      },
+      error: err => {
+        this.paying.set(false);
+        this.toast.apiError(err, 'Could not confirm payment');
+      }
+    });
+  }
+
   paidBadgeClass(): string {
     const o = this.order();
     if (!o) return 'badge-slate';

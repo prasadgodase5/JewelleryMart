@@ -63,6 +63,9 @@ export class ApiService {
   }) {
     return this.http.post<Order>(`${this.base}/payments/verify`, payload);
   }
+  manualConfirmPayment(orderId: number) {
+    return this.http.post<Order>(`${this.base}/payments/manual-confirm`, { orderId });
+  }
 
   // Stats
   stats(): Observable<Stats> { return this.http.get<Stats>(`${this.base}/stats`); }

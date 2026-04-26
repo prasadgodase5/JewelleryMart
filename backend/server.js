@@ -361,6 +361,30 @@ app.post('/api/payments/verify', (req, res) => {
   res.json(order);
 });
 
+// Manual / demo payment confirmation (no signature check) — used when
+// Razorpay isn't configured or for a quick demo path
+app.post('/api/payments/manual-confirm', (req, res) => {
+  const { orderId } = req.body || {};
+  if (!orderId) return res.status(400).json({ error: 'orderId required' });
+
+  const db = readDb();
+  const order = (db.orders || []).find(o => String(o.id) === String(orderId));
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+  if (order.status === 'Paid') return res.status(400).json({ error: 'Order already paid' });
+  if (order.status === 'Expired') {
+    // Re-decrement stock since we're undoing the expiry
+    decrementStock(db, order.items);
+  }
+
+  order.status = 'Paid';
+  order.paymentMode = 'UPI';
+  order.paymentId = 'manual_' + Date.now();
+  order.paidAt = new Date().toISOString();
+  order.paymentSource = 'manual';
+  writeDb(db);
+  res.json(order);
+});
+
 // Mark order expired (used when timer runs out) — restores stock
 app.post('/api/expire-payment', (req, res) => {
   const { orderId } = req.body || {};
