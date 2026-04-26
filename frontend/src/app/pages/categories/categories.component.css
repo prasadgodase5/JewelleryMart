@@ -21,6 +21,35 @@
 .danger-text { color: #dc2626; }
 .danger-text:hover { background: #fef2f2; }
 
+.cat-icon {
+  display: inline-flex;
+  width: 36px; height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: .45rem;
+  background: linear-gradient(135deg, rgba(99,102,241,.12), rgba(236,72,153,.12));
+  color: #4338ca;
+  font-size: 1rem;
+}
+
+.icon-row {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: .65rem;
+  align-items: stretch;
+}
+.icon-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: .45rem;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  color: #fff;
+  font-size: 1.4rem;
+  box-shadow: 0 6px 14px rgba(99,102,241,.25);
+}
+
 /* Form */
 .form-stack { display: flex; flex-direction: column; gap: .9rem; }
 .form-actions {

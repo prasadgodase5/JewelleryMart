@@ -1,137 +1,603 @@
 {
-  "products": [
-    {
-      "id": 1,
-      "name": "Wireless Mouse",
-      "price": 799,
-      "categoryId": 1,
-      "stock": 35,
-      "image": "https://picsum.photos/seed/mouse/300/200",
-      "createdAt": "2026-01-12T10:30:00.000Z"
-    },
-    {
-      "id": 2,
-      "name": "Mechanical Keyboard",
-      "price": 3499,
-      "categoryId": 1,
-      "stock": 18,
-      "image": "https://picsum.photos/seed/keyboard/300/200",
-      "createdAt": "2026-01-15T11:00:00.000Z"
-    },
-    {
-      "id": 3,
-      "name": "Cotton T-Shirt",
-      "price": 499,
-      "categoryId": 2,
-      "stock": 120,
-      "image": "https://picsum.photos/seed/tshirt/300/200",
-      "createdAt": "2026-02-02T09:15:00.000Z"
-    },
-    {
-      "id": 4,
-      "name": "Running Shoes",
-      "price": 2599,
-      "categoryId": 2,
-      "stock": 42,
-      "image": "https://picsum.photos/seed/shoes/300/200",
-      "createdAt": "2026-02-10T14:00:00.000Z"
-    },
-    {
-      "id": 5,
-      "name": "Stainless Water Bottle",
-      "price": 349,
-      "categoryId": 3,
-      "stock": 80,
-      "image": "https://picsum.photos/seed/bottle/300/200",
-      "createdAt": "2026-03-01T08:45:00.000Z"
-    }
-  ],
   "categories": [
     {
       "id": 1,
-      "name": "Electronics",
-      "description": "Gadgets and accessories"
+      "name": "Air Conditioners",
+      "icon": "bi-snow2",
+      "description": "Split, window and inverter ACs from top brands"
     },
     {
       "id": 2,
-      "name": "Apparel",
-      "description": "Clothing and footwear"
+      "name": "Televisions",
+      "icon": "bi-tv",
+      "description": "LED, OLED, QLED and 4K smart TVs"
     },
     {
       "id": 3,
-      "name": "Home & Kitchen",
-      "description": "Daily-use items"
+      "name": "Refrigerators",
+      "icon": "bi-archive",
+      "description": "Single door, double door and side-by-side fridges"
+    },
+    {
+      "id": 4,
+      "name": "Washing Machines",
+      "icon": "bi-droplet",
+      "description": "Top load, front load and semi-automatic"
+    },
+    {
+      "id": 5,
+      "name": "Fans",
+      "icon": "bi-fan",
+      "description": "Ceiling, table, pedestal and tower fans"
+    },
+    {
+      "id": 6,
+      "name": "Lighting",
+      "icon": "bi-lightbulb",
+      "description": "LED bulbs, smart lights, tube lights and decor"
+    },
+    {
+      "id": 7,
+      "name": "Kitchen Appliances",
+      "icon": "bi-cup-hot",
+      "description": "Microwaves, mixers, induction and air fryers"
+    },
+    {
+      "id": 8,
+      "name": "Audio & Speakers",
+      "icon": "bi-speaker",
+      "description": "Bluetooth speakers, soundbars and home theatres"
+    },
+    {
+      "id": 9,
+      "name": "Mobiles",
+      "icon": "bi-phone",
+      "description": "Smartphones, tablets and accessories"
+    },
+    {
+      "id": 10,
+      "name": "Laptops & PCs",
+      "icon": "bi-laptop",
+      "description": "Laptops, desktops, monitors and printers"
+    },
+    {
+      "id": 11,
+      "name": "Cameras",
+      "icon": "bi-camera",
+      "description": "DSLR, mirrorless and action cameras"
+    },
+    {
+      "id": 12,
+      "name": "Personal Care",
+      "icon": "bi-scissors",
+      "description": "Trimmers, hair dryers, electric shavers"
+    }
+  ],
+  "products": [
+    {
+      "id": 101,
+      "name": "LG 1.5 Ton 5 Star Inverter Split AC",
+      "price": 42999,
+      "categoryId": 1,
+      "stock": 25,
+      "image": "https://placehold.co/400x300/0ea5e9/ffffff/png?text=LG+1.5T+Inverter+AC&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 102,
+      "name": "Voltas 1 Ton 3 Star Window AC",
+      "price": 28999,
+      "categoryId": 1,
+      "stock": 18,
+      "image": "https://placehold.co/400x300/0ea5e9/ffffff/png?text=Voltas+1T+Window+AC&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 103,
+      "name": "Daikin 1.5 Ton 5 Star Split AC",
+      "price": 46500,
+      "categoryId": 1,
+      "stock": 12,
+      "image": "https://placehold.co/400x300/0ea5e9/ffffff/png?text=Daikin+1.5T+Split+AC&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 104,
+      "name": "Samsung 1.5 Ton WindFree Inverter AC",
+      "price": 54999,
+      "categoryId": 1,
+      "stock": 8,
+      "image": "https://placehold.co/400x300/0ea5e9/ffffff/png?text=Samsung+WindFree+AC&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 105,
+      "name": "Blue Star 2 Ton 3 Star Inverter AC",
+      "price": 49990,
+      "categoryId": 1,
+      "stock": 6,
+      "image": "https://placehold.co/400x300/0ea5e9/ffffff/png?text=Blue+Star+2T+AC&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 201,
+      "name": "Samsung 55\" 4K Crystal UHD Smart TV",
+      "price": 52999,
+      "categoryId": 2,
+      "stock": 22,
+      "image": "https://placehold.co/400x300/1e293b/ffffff/png?text=Samsung+55+4K+TV&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 202,
+      "name": "LG 43\" 4K UHD Smart TV",
+      "price": 39999,
+      "categoryId": 2,
+      "stock": 30,
+      "image": "https://placehold.co/400x300/1e293b/ffffff/png?text=LG+43+4K+UHD+TV&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 203,
+      "name": "Sony Bravia 65\" OLED 4K Smart TV",
+      "price": 179999,
+      "categoryId": 2,
+      "stock": 4,
+      "image": "https://placehold.co/400x300/1e293b/ffffff/png?text=Sony+OLED+65&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 204,
+      "name": "Mi 32\" HD Ready Smart TV",
+      "price": 14999,
+      "categoryId": 2,
+      "stock": 45,
+      "image": "https://placehold.co/400x300/1e293b/ffffff/png?text=Mi+32+HD+TV&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 205,
+      "name": "OnePlus Q1 55\" QLED 4K TV",
+      "price": 62999,
+      "categoryId": 2,
+      "stock": 10,
+      "image": "https://placehold.co/400x300/1e293b/ffffff/png?text=OnePlus+QLED+55&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 301,
+      "name": "LG 308L Frost-Free Double Door Fridge",
+      "price": 32999,
+      "categoryId": 3,
+      "stock": 14,
+      "image": "https://placehold.co/400x300/06b6d4/ffffff/png?text=LG+308L+Fridge&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 302,
+      "name": "Whirlpool 240L Single Door Refrigerator",
+      "price": 19990,
+      "categoryId": 3,
+      "stock": 26,
+      "image": "https://placehold.co/400x300/06b6d4/ffffff/png?text=Whirlpool+240L&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 303,
+      "name": "Samsung 580L Side-by-Side Refrigerator",
+      "price": 76999,
+      "categoryId": 3,
+      "stock": 5,
+      "image": "https://placehold.co/400x300/06b6d4/ffffff/png?text=Samsung+580L+Side&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 304,
+      "name": "Godrej 192L Direct Cool Refrigerator",
+      "price": 14990,
+      "categoryId": 3,
+      "stock": 32,
+      "image": "https://placehold.co/400x300/06b6d4/ffffff/png?text=Godrej+192L&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 401,
+      "name": "IFB 7kg Front Load Washing Machine",
+      "price": 29990,
+      "categoryId": 4,
+      "stock": 15,
+      "image": "https://placehold.co/400x300/6366f1/ffffff/png?text=IFB+7kg+Front+Load&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 402,
+      "name": "LG 6.5kg Top Load Washing Machine",
+      "price": 17990,
+      "categoryId": 4,
+      "stock": 22,
+      "image": "https://placehold.co/400x300/6366f1/ffffff/png?text=LG+6.5kg+Top+Load&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 403,
+      "name": "Samsung 7.5kg Semi-Automatic",
+      "price": 13499,
+      "categoryId": 4,
+      "stock": 18,
+      "image": "https://placehold.co/400x300/6366f1/ffffff/png?text=Samsung+Semi+Auto&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 404,
+      "name": "Bosch 8kg Front Load Washing Machine",
+      "price": 38990,
+      "categoryId": 4,
+      "stock": 7,
+      "image": "https://placehold.co/400x300/6366f1/ffffff/png?text=Bosch+8kg+Front&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 501,
+      "name": "Havells Stealth Air Ceiling Fan 1200mm",
+      "price": 3499,
+      "categoryId": 5,
+      "stock": 80,
+      "image": "https://placehold.co/400x300/10b981/ffffff/png?text=Havells+Ceiling+Fan&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 502,
+      "name": "Bajaj Maxima 400mm Pedestal Fan",
+      "price": 2499,
+      "categoryId": 5,
+      "stock": 60,
+      "image": "https://placehold.co/400x300/10b981/ffffff/png?text=Bajaj+Pedestal+Fan&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 503,
+      "name": "Crompton Tower Fan",
+      "price": 5499,
+      "categoryId": 5,
+      "stock": 25,
+      "image": "https://placehold.co/400x300/10b981/ffffff/png?text=Crompton+Tower+Fan&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 504,
+      "name": "Atomberg Renesa Smart Ceiling Fan",
+      "price": 4999,
+      "categoryId": 5,
+      "stock": 42,
+      "image": "https://placehold.co/400x300/10b981/ffffff/png?text=Atomberg+Smart+Fan&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 505,
+      "name": "Usha Mist Air Table Fan",
+      "price": 1899,
+      "categoryId": 5,
+      "stock": 90,
+      "image": "https://placehold.co/400x300/10b981/ffffff/png?text=Usha+Table+Fan&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 601,
+      "name": "Philips 9W LED Bulb (Pack of 4)",
+      "price": 449,
+      "categoryId": 6,
+      "stock": 200,
+      "image": "https://placehold.co/400x300/f59e0b/ffffff/png?text=Philips+LED+Bulbs&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 602,
+      "name": "Mi LED Smart Wi-Fi Bulb",
+      "price": 699,
+      "categoryId": 6,
+      "stock": 120,
+      "image": "https://placehold.co/400x300/f59e0b/ffffff/png?text=Mi+Smart+Bulb&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 603,
+      "name": "Wipro 18W LED Tube Light",
+      "price": 399,
+      "categoryId": 6,
+      "stock": 150,
+      "image": "https://placehold.co/400x300/f59e0b/ffffff/png?text=Wipro+LED+Tube&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 604,
+      "name": "Syska Rechargeable Emergency Light",
+      "price": 999,
+      "categoryId": 6,
+      "stock": 65,
+      "image": "https://placehold.co/400x300/f59e0b/ffffff/png?text=Syska+Emergency+Light&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 605,
+      "name": "Philips Hue Color Smart Bulb",
+      "price": 2499,
+      "categoryId": 6,
+      "stock": 30,
+      "image": "https://placehold.co/400x300/f59e0b/ffffff/png?text=Philips+Hue+Color&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 701,
+      "name": "LG 28L Convection Microwave Oven",
+      "price": 14999,
+      "categoryId": 7,
+      "stock": 18,
+      "image": "https://placehold.co/400x300/f43f5e/ffffff/png?text=LG+28L+Microwave&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 702,
+      "name": "Prestige Induction Cooktop 2000W",
+      "price": 2999,
+      "categoryId": 7,
+      "stock": 70,
+      "image": "https://placehold.co/400x300/f43f5e/ffffff/png?text=Prestige+Induction&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 703,
+      "name": "Philips Mixer Grinder 750W",
+      "price": 3499,
+      "categoryId": 7,
+      "stock": 50,
+      "image": "https://placehold.co/400x300/f43f5e/ffffff/png?text=Philips+Mixer&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 704,
+      "name": "Sujata Powermatic Plus Mixer 900W",
+      "price": 4499,
+      "categoryId": 7,
+      "stock": 40,
+      "image": "https://placehold.co/400x300/f43f5e/ffffff/png?text=Sujata+Powermatic&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 705,
+      "name": "Pigeon Stovekraft 5L Air Fryer",
+      "price": 4990,
+      "categoryId": 7,
+      "stock": 28,
+      "image": "https://placehold.co/400x300/f43f5e/ffffff/png?text=Pigeon+Air+Fryer&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 801,
+      "name": "boAt Stone 1200 Bluetooth Speaker",
+      "price": 2999,
+      "categoryId": 8,
+      "stock": 85,
+      "image": "https://placehold.co/400x300/8b5cf6/ffffff/png?text=boAt+Stone+1200&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 802,
+      "name": "JBL Flip 6 Portable Speaker",
+      "price": 8999,
+      "categoryId": 8,
+      "stock": 35,
+      "image": "https://placehold.co/400x300/8b5cf6/ffffff/png?text=JBL+Flip+6&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 803,
+      "name": "Sony SRS-XB13 Bluetooth Speaker",
+      "price": 3490,
+      "categoryId": 8,
+      "stock": 60,
+      "image": "https://placehold.co/400x300/8b5cf6/ffffff/png?text=Sony+SRS-XB13&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 804,
+      "name": "Marshall Acton III Speaker",
+      "price": 19999,
+      "categoryId": 8,
+      "stock": 8,
+      "image": "https://placehold.co/400x300/8b5cf6/ffffff/png?text=Marshall+Acton+III&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 805,
+      "name": "Boult Audio AirBass Soundbar",
+      "price": 4499,
+      "categoryId": 8,
+      "stock": 22,
+      "image": "https://placehold.co/400x300/8b5cf6/ffffff/png?text=Boult+Soundbar&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 901,
+      "name": "Redmi Note 13 Pro 5G",
+      "price": 24999,
+      "categoryId": 9,
+      "stock": 55,
+      "image": "https://placehold.co/400x300/ec4899/ffffff/png?text=Redmi+Note+13+Pro&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 902,
+      "name": "Samsung Galaxy S24 5G 256GB",
+      "price": 74999,
+      "categoryId": 9,
+      "stock": 18,
+      "image": "https://placehold.co/400x300/ec4899/ffffff/png?text=Galaxy+S24&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 903,
+      "name": "Apple iPhone 15 128GB",
+      "price": 79900,
+      "categoryId": 9,
+      "stock": 14,
+      "image": "https://placehold.co/400x300/ec4899/ffffff/png?text=iPhone+15&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 904,
+      "name": "OnePlus Nord CE 4 5G",
+      "price": 24999,
+      "categoryId": 9,
+      "stock": 30,
+      "image": "https://placehold.co/400x300/ec4899/ffffff/png?text=OnePlus+Nord+CE+4&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 905,
+      "name": "Realme Narzo 70 Pro 5G",
+      "price": 17999,
+      "categoryId": 9,
+      "stock": 48,
+      "image": "https://placehold.co/400x300/ec4899/ffffff/png?text=Realme+Narzo+70+Pro&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 1001,
+      "name": "HP Pavilion 14 Intel i5 12th Gen",
+      "price": 54990,
+      "categoryId": 10,
+      "stock": 12,
+      "image": "https://placehold.co/400x300/475569/ffffff/png?text=HP+Pavilion+14&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 1002,
+      "name": "Dell Inspiron 15 Intel i5",
+      "price": 49990,
+      "categoryId": 10,
+      "stock": 16,
+      "image": "https://placehold.co/400x300/475569/ffffff/png?text=Dell+Inspiron+15&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 1003,
+      "name": "Lenovo IdeaPad Slim 3 Ryzen 5",
+      "price": 39990,
+      "categoryId": 10,
+      "stock": 20,
+      "image": "https://placehold.co/400x300/475569/ffffff/png?text=Lenovo+IdeaPad+3&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 1004,
+      "name": "Apple MacBook Air M2 13\"",
+      "price": 99900,
+      "categoryId": 10,
+      "stock": 9,
+      "image": "https://placehold.co/400x300/475569/ffffff/png?text=MacBook+Air+M2&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "id": 1005,
+      "name": "ASUS ROG Strix G16 Gaming Laptop",
+      "price": 109990,
+      "categoryId": 10,
+      "stock": 6,
+      "image": "https://placehold.co/400x300/475569/ffffff/png?text=ASUS+ROG+Strix&font=roboto",
+      "createdAt": "2026-03-05T10:00:00.000Z"
+    },
+    {
+      "id": 1101,
+      "name": "Canon EOS 1500D DSLR (18-55mm)",
+      "price": 33990,
+      "categoryId": 11,
+      "stock": 10,
+      "image": "https://placehold.co/400x300/22c55e/ffffff/png?text=Canon+EOS+1500D&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 1102,
+      "name": "Sony Alpha ILCE-6100 Mirrorless",
+      "price": 71990,
+      "categoryId": 11,
+      "stock": 5,
+      "image": "https://placehold.co/400x300/22c55e/ffffff/png?text=Sony+Alpha+6100&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 1103,
+      "name": "GoPro HERO 12 Black Action Camera",
+      "price": 41990,
+      "categoryId": 11,
+      "stock": 8,
+      "image": "https://placehold.co/400x300/22c55e/ffffff/png?text=GoPro+HERO+12&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 1201,
+      "name": "Philips BT3211 Beard Trimmer",
+      "price": 1499,
+      "categoryId": 12,
+      "stock": 90,
+      "image": "https://placehold.co/400x300/d946ef/ffffff/png?text=Philips+Trimmer&font=roboto",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": 1202,
+      "name": "Mi 2C Hair Dryer 1600W",
+      "price": 1299,
+      "categoryId": 12,
+      "stock": 70,
+      "image": "https://placehold.co/400x300/d946ef/ffffff/png?text=Mi+Hair+Dryer&font=roboto",
+      "createdAt": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "id": 1203,
+      "name": "Braun Series 3 Electric Shaver",
+      "price": 4999,
+      "categoryId": 12,
+      "stock": 30,
+      "image": "https://placehold.co/400x300/d946ef/ffffff/png?text=Braun+Series+3&font=roboto",
+      "createdAt": "2026-03-03T10:00:00.000Z"
+    },
+    {
+      "id": 1204,
+      "name": "Dyson Supersonic Hair Dryer",
+      "price": 39900,
+      "categoryId": 12,
+      "stock": 4,
+      "image": "https://placehold.co/400x300/d946ef/ffffff/png?text=Dyson+Supersonic&font=roboto",
+      "createdAt": "2026-03-04T10:00:00.000Z"
     }
   ],
   "orders": [
     {
-      "id": 1001,
-      "customer": "Aarav Sharma",
-      "items": [
-        {
-          "productId": 1,
-          "qty": 2
-        }
-      ],
-      "amount": 1598,
-      "status": "Pending",
-      "paymentMode": "UPI",
-      "createdAt": "2026-04-20T10:00:00.000Z"
-    },
-    {
-      "id": 1002,
-      "customer": "Priya Patel",
-      "items": [
-        {
-          "productId": 4,
-          "qty": 1
-        }
-      ],
-      "amount": 2599,
-      "status": "Shipped",
-      "paymentMode": "UPI",
-      "createdAt": "2026-04-21T12:30:00.000Z"
-    },
-    {
-      "id": 1003,
-      "customer": "Rahul Verma",
-      "items": [
-        {
-          "productId": 3,
-          "qty": 3
-        }
-      ],
-      "amount": 1497,
-      "status": "Delivered",
-      "paymentMode": "UPI",
-      "createdAt": "2026-04-22T16:10:00.000Z"
-    },
-    {
-      "customer": "prasad",
-      "amount": 100,
-      "items": [],
-      "status": "Pending",
-      "paymentMode": "UPI",
-      "id": 1004,
-      "createdAt": "2026-04-26T10:11:12.505Z"
-    },
-    {
       "customer": "prasad",
       "items": [
         {
-          "productId": 5,
+          "productId": 105,
+          "qty": 1
+        },
+        {
+          "productId": 205,
           "qty": 1
         }
       ],
-      "amount": 349,
-      "status": "Paid",
+      "amount": 112989,
+      "status": "Pending",
       "paymentMode": "UPI",
-      "id": 1005,
-      "createdAt": "2026-04-26T10:29:11.618Z",
-      "paidAt": "2026-04-26T10:29:20.079Z"
+      "id": 1,
+      "createdAt": "2026-04-26T10:49:34.014Z"
     }
   ],
   "users": [
+    {
+      "id": 1,
+      "name": "Aarav Sharma",
+      "email": "aarav@example.com",
+      "role": "customer",
+      "phone": "9876543210"
+    },
     {
       "id": 2,
       "name": "Priya Patel",
@@ -145,6 +611,13 @@
       "email": "admin@example.com",
       "role": "admin",
       "phone": "9000000000"
+    },
+    {
+      "id": 4,
+      "name": "Prasad",
+      "email": "prasad@example.com",
+      "role": "customer",
+      "phone": "9604062216"
     }
   ]
 }

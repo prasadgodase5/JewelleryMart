@@ -2,52 +2,70 @@
   <div class="hero">
     <div class="hero-left">
       <h2>Hello, {{ username() }} 👋</h2>
-      <p>Discover products you love and check out instantly via UPI.</p>
+      <p>Welcome to PG E-Mart Electronics — pick a category from the sidebar to start shopping.</p>
       <div class="hero-meta">
         <span class="meta-pill"><i class="bi bi-telephone"></i> {{ phone() }}</span>
+        <a routerLink="/user/cart" class="meta-pill clickable">
+          <i class="bi bi-cart3"></i> Cart ({{ cart.count() }})
+        </a>
         <a routerLink="/user/orders" class="meta-pill clickable">
           <i class="bi bi-bag-check"></i> My Orders
         </a>
       </div>
     </div>
     <div class="hero-illust">
-      <i class="bi bi-bag-heart-fill"></i>
+      <i class="bi" [ngClass]="activeCategoryIcon()"></i>
     </div>
   </div>
 
-  <div class="app-card">
-    <div class="filter-bar">
-      <input class="app-input" placeholder="Search products…"
-             [value]="search()"
-             (input)="setSearch($any($event.target).value)" />
-      <select class="app-input"
-              [value]="categoryFilter()"
-              (change)="setCategoryFilter($any($event.target).value)">
-        <option [value]="0">All categories</option>
-        <option *ngFor="let c of categories()" [value]="c.id">{{ c.name }}</option>
-      </select>
-      <select class="app-input"
-              [value]="sortBy()"
-              (change)="setSort($any($event.target).value)">
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-        <option value="priceAsc">Price: Low → High</option>
-        <option value="priceDesc">Price: High → Low</option>
-      </select>
+  <div class="content-head">
+    <div>
+      <h3 class="active-cat">
+        <i class="bi" [ngClass]="activeCategoryIcon()"></i>
+        {{ activeCategoryName() }}
+      </h3>
+      <p class="active-desc" *ngIf="activeCategoryDesc()">{{ activeCategoryDesc() }}</p>
     </div>
+    <span class="content-count">{{ filtered().length }} item{{ filtered().length === 1 ? '' : 's' }}</span>
+  </div>
 
-    <div class="product-grid" *ngIf="filtered().length; else emptyTpl">
-      <div class="product-card" *ngFor="let p of filtered()">
-        <div class="product-thumb">
-          <img [src]="p.image || 'https://via.placeholder.com/300x200'" [alt]="p.name" />
-          <span class="app-badge thumb-badge" [ngClass]="stockClass(p.stock)">
-            {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
-          </span>
-        </div>
-        <div class="product-body">
-          <div class="product-cat">{{ catName(p.categoryId) }}</div>
-          <h4 class="product-name">{{ p.name }}</h4>
-          <div class="product-price">₹{{ p.price }}</div>
+  <div class="filter-bar">
+    <input class="app-input" placeholder="Search products…"
+           [value]="search()"
+           (input)="setSearch($any($event.target).value)" />
+    <select class="app-input"
+            [value]="sortBy()"
+            (change)="setSort($any($event.target).value)">
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+      <option value="priceAsc">Price: Low → High</option>
+      <option value="priceDesc">Price: High → Low</option>
+    </select>
+  </div>
+
+  <div class="product-grid" *ngIf="filtered().length; else emptyTpl">
+    <div class="product-card" *ngFor="let p of filtered()">
+      <div class="product-thumb">
+        <img [src]="p.image || 'https://via.placeholder.com/300x200'" [alt]="p.name" />
+        <span class="app-badge thumb-badge" [ngClass]="stockClass(p.stock)">
+          {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
+        </span>
+        <span class="cart-flag" *ngIf="cart.hasProduct(p.id!)">
+          <i class="bi bi-cart-check-fill"></i> In cart × {{ cart.qtyOf(p.id!) }}
+        </span>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">{{ catName(p.categoryId) }}</div>
+        <h4 class="product-name" [title]="p.name">{{ p.name }}</h4>
+        <div class="product-price">₹{{ p.price | number:'1.0-0' }}</div>
+        <div class="action-row">
+          <button type="button"
+                  class="cart-btn"
+                  [disabled]="p.stock <= 0"
+                  (click)="addToCart(p)">
+            <i class="bi bi-cart-plus"></i>
+            Add to Cart
+          </button>
           <button type="button"
                   class="buy-btn"
                   [disabled]="p.stock <= 0 || buyingId() === p.id"
@@ -58,12 +76,12 @@
         </div>
       </div>
     </div>
-
-    <ng-template #emptyTpl>
-      <div class="empty-state">
-        <i class="bi bi-search"></i>
-        <p>No products match your filters.</p>
-      </div>
-    </ng-template>
   </div>
+
+  <ng-template #emptyTpl>
+    <div class="empty-state">
+      <i class="bi bi-search"></i>
+      <p>No products match your filters.</p>
+    </div>
+  </ng-template>
 </section>

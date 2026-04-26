@@ -1,0 +1,108 @@
+<section class="cart-page">
+  <div class="page-head">
+    <div>
+      <h2><i class="bi bi-cart3"></i> Your Cart</h2>
+      <p class="muted">{{ cart.count() }} item{{ cart.count() === 1 ? '' : 's' }} ready for checkout</p>
+    </div>
+    <div class="head-actions">
+      <a routerLink="/user/shop" class="app-btn app-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Continue Shopping
+      </a>
+      <button type="button"
+              class="app-btn app-btn-ghost danger-text"
+              *ngIf="!cart.isEmpty()"
+              (click)="clearAll()">
+        <i class="bi bi-trash"></i> Clear Cart
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!cart.isEmpty(); else emptyTpl">
+    <div class="cart-grid">
+      <!-- Items -->
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cart.items()">
+          <img [src]="item.image || 'https://via.placeholder.com/120'" [alt]="item.name" class="ci-thumb" />
+          <div class="ci-body">
+            <h4 class="ci-name">{{ item.name }}</h4>
+            <div class="ci-price-line">
+              <span class="ci-price">₹{{ item.price | number:'1.0-0' }}</span>
+              <span class="ci-stock" *ngIf="item.stock <= 5">Only {{ item.stock }} left</span>
+            </div>
+
+            <div class="qty-row">
+              <span class="qty-label">Qty</span>
+              <div class="qty-control">
+                <button type="button" (click)="dec(item.productId)" aria-label="Decrease">
+                  <i class="bi bi-dash-lg"></i>
+                </button>
+                <input type="number" min="1" [max]="item.stock"
+                       [value]="item.qty"
+                       (change)="setQtyManual(item.productId, $any($event.target).value)" />
+                <button type="button" [disabled]="item.qty >= item.stock" (click)="inc(item.productId)" aria-label="Increase">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
+              <button type="button" class="ci-remove" (click)="remove(item.productId)">
+                <i class="bi bi-x-circle"></i> Remove
+              </button>
+            </div>
+          </div>
+          <div class="ci-subtotal">
+            <span class="st-label">Subtotal</span>
+            <span class="st-value">₹{{ (item.price * item.qty) | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="cart-summary">
+        <h3>Order Summary</h3>
+
+        <div class="sm-row">
+          <span>Items ({{ cart.count() }})</span>
+          <span>₹{{ cart.subtotal() | number:'1.0-0' }}</span>
+        </div>
+        <div class="sm-row">
+          <span>Shipping</span>
+          <span *ngIf="shipping() === 0; else shipFee" class="ship-free">FREE</span>
+          <ng-template #shipFee><span>₹{{ shipping() }}</span></ng-template>
+        </div>
+        <p class="ship-hint" *ngIf="shipping() > 0">
+          <i class="bi bi-truck"></i> Spend ₹{{ freeShippingFrom - cart.subtotal() | number:'1.0-0' }} more for free shipping
+        </p>
+
+        <div class="sm-divider"></div>
+
+        <div class="sm-row sm-total">
+          <span>Total</span>
+          <span class="total-amount">₹{{ total() | number:'1.0-0' }}</span>
+        </div>
+
+        <button type="button"
+                class="proceed-btn"
+                [disabled]="placing()"
+                (click)="proceedToPay()">
+          <i class="bi" [ngClass]="placing() ? 'bi-arrow-repeat spin' : 'bi-lightning-charge-fill'"></i>
+          {{ placing() ? 'Placing order…' : 'Proceed to UPI Payment' }}
+        </button>
+
+        <div class="sm-secure">
+          <i class="bi bi-shield-lock-fill"></i>
+          Secure checkout via Razorpay UPI
+        </div>
+      </aside>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyTpl>
+    <div class="empty-cart">
+      <i class="bi bi-cart-x"></i>
+      <h3>Your cart is empty</h3>
+      <p>Looks like you haven't added anything yet.</p>
+      <a routerLink="/user/shop" class="app-btn app-btn-primary">
+        <i class="bi bi-shop"></i> Start Shopping
+      </a>
+    </div>
+  </ng-template>
+</section>

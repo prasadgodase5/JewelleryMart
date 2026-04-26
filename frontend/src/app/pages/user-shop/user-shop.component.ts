@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { AuthService } from '../../core/auth.service';
+import { CartService } from '../../core/cart.service';
 import { ToastService } from '../../core/toast.service';
 import { Product, Category, Order } from '../../models/models';
 
@@ -20,6 +21,8 @@ export class UserShopComponent implements OnInit {
   private auth = inject(AuthService);
   private toast = inject(ToastService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  cart = inject(CartService);
 
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
@@ -45,14 +48,33 @@ export class UserShopComponent implements OnInit {
     });
   });
 
+  activeCategoryName = computed<string>(() => {
+    if (!this.categoryFilter()) return 'All Products';
+    return this.categories().find(c => c.id === this.categoryFilter())?.name || 'All Products';
+  });
+
+  activeCategoryDesc = computed<string>(() => {
+    if (!this.categoryFilter()) return 'Browse our full electronics catalog';
+    return this.categories().find(c => c.id === this.categoryFilter())?.description || '';
+  });
+
+  activeCategoryIcon = computed<string>(() => {
+    if (!this.categoryFilter()) return 'bi-collection-fill';
+    return this.categories().find(c => c.id === this.categoryFilter())?.icon || 'bi-tag';
+  });
+
   ngOnInit(): void {
     this.api.listProducts().subscribe(ps => this.products.set(ps));
     this.api.listCategories().subscribe(cs => this.categories.set(cs));
+
+    this.route.queryParamMap.subscribe(qp => {
+      const cat = qp.get('cat');
+      this.categoryFilter.set(cat ? +cat : 0);
+    });
   }
 
-  setSearch(v: string)         { this.search.set(v); }
-  setCategoryFilter(v: string) { this.categoryFilter.set(+v); }
-  setSort(v: string)           { this.sortBy.set(v as SortKey); }
+  setSearch(v: string): void { this.search.set(v); }
+  setSort(v: string): void { this.sortBy.set(v as SortKey); }
 
   catName(id: number): string {
     return this.categories().find(c => c.id === id)?.name || '—';
@@ -62,6 +84,15 @@ export class UserShopComponent implements OnInit {
     if (stock > 10) return 'badge-green';
     if (stock > 0)  return 'badge-amber';
     return 'badge-rose';
+  }
+
+  addToCart(p: Product): void {
+    if (p.stock <= 0) {
+      this.toast.warn('Product out of stock');
+      return;
+    }
+    this.cart.add(p, 1);
+    this.toast.success(`${p.name} added to cart`);
   }
 
   buyNow(p: Product): void {

@@ -12,6 +12,7 @@ export interface Category {
   id?: number;
   name: string;
   description?: string;
+  icon?: string;
 }
 
 export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Paid' | 'Expired';

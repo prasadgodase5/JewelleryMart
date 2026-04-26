@@ -39,6 +39,7 @@ export const routes: Routes = [
     children: [
       { path: '',            pathMatch: 'full', redirectTo: 'shop' },
       { path: 'shop',        loadComponent: () => import('./pages/user-shop/user-shop.component').then(m => m.UserShopComponent) },
+      { path: 'cart',        loadComponent: () => import('./pages/user-cart/user-cart.component').then(m => m.UserCartComponent) },
       { path: 'orders',      loadComponent: () => import('./pages/user-orders/user-orders.component').then(m => m.UserOrdersComponent) },
       { path: 'checkout',     loadComponent: () => import('./pages/checkout/checkout.component').then(m => m.CheckoutComponent) },
       { path: 'checkout/:id', loadComponent: () => import('./pages/checkout/checkout.component').then(m => m.CheckoutComponent) }

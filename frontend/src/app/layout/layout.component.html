@@ -8,7 +8,7 @@
       </div>
       <div class="brand-text">
         <div class="brand-title">PG E-Mart</div>
-        <div class="brand-subtitle">{{ auth.role() === 'admin' ? 'Admin Console' : 'Shop Smart' }}</div>
+        <div class="brand-subtitle">{{ auth.role() === 'admin' ? 'Admin Console' : 'Electronics Hub' }}</div>
       </div>
     </div>
 
@@ -19,8 +19,36 @@
          (click)="closeOnMobile()"
          class="sidebar-link">
         <i class="bi {{ item.icon }}"></i>
-        <span>{{ item.label }}</span>
+        <span class="sidebar-link-label">{{ item.label }}</span>
+        <span *ngIf="item.badge && item.badge() > 0" class="sidebar-badge">{{ item.badge!() }}</span>
       </a>
+
+      <!-- Categories (user only) -->
+      <ng-container *ngIf="showCategoriesNav()">
+        <div class="sidebar-section">
+          <i class="bi bi-grid-3x3-gap-fill"></i>
+          <span>Shop by Category</span>
+        </div>
+
+        <a [routerLink]="['/user/shop']"
+           [queryParams]="{}"
+           (click)="closeOnMobile()"
+           [class.active]="isCategoryActive(null)"
+           class="sidebar-link sidebar-cat">
+          <i class="bi bi-collection-fill"></i>
+          <span class="sidebar-link-label">All Products</span>
+        </a>
+
+        <a *ngFor="let c of categories()"
+           [routerLink]="['/user/shop']"
+           [queryParams]="{ cat: c.id }"
+           (click)="closeOnMobile()"
+           [class.active]="isCategoryActive(c.id)"
+           class="sidebar-link sidebar-cat">
+          <i class="bi" [ngClass]="c.icon || 'bi-tag'"></i>
+          <span class="sidebar-link-label">{{ c.name }}</span>
+        </a>
+      </ng-container>
     </nav>
 
     <div class="sidebar-footer">
@@ -49,6 +77,14 @@
         <h1>{{ pageTitle() }}</h1>
         <p>{{ pageSubtitle() }}</p>
       </div>
+
+      <a *ngIf="auth.role() === 'user'"
+         routerLink="/user/cart"
+         class="topbar-cart"
+         aria-label="Cart">
+        <i class="bi bi-cart3"></i>
+        <span *ngIf="cart.count() > 0" class="topbar-cart-badge">{{ cart.count() }}</span>
+      </a>
 
       <div class="user-menu-wrap">
         <button type="button" class="user-trigger" (click)="toggleUserMenu()">

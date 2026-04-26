@@ -30,9 +30,29 @@ export class CategoriesComponent implements OnInit {
   editing = signal<Category | null>(null);
   submitted = signal<boolean>(false);
 
+  iconOptions: { value: string; label: string }[] = [
+    { value: 'bi-tag',                label: 'Tag' },
+    { value: 'bi-snow2',              label: 'AC / Cooling' },
+    { value: 'bi-tv',                 label: 'TV / Display' },
+    { value: 'bi-archive',            label: 'Refrigerator' },
+    { value: 'bi-droplet',            label: 'Washing' },
+    { value: 'bi-fan',                label: 'Fan' },
+    { value: 'bi-lightbulb',          label: 'Lighting' },
+    { value: 'bi-cup-hot',            label: 'Kitchen' },
+    { value: 'bi-speaker',            label: 'Audio' },
+    { value: 'bi-phone',              label: 'Mobile' },
+    { value: 'bi-laptop',             label: 'Laptop / PC' },
+    { value: 'bi-camera',             label: 'Camera' },
+    { value: 'bi-scissors',           label: 'Personal Care' },
+    { value: 'bi-controller',         label: 'Gaming' },
+    { value: 'bi-watch',              label: 'Wearables' },
+    { value: 'bi-headphones',         label: 'Headphones' }
+  ];
+
   form: FormGroup = this.fb.group({
     name:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
-    description: ['', [Validators.maxLength(200)]]
+    description: ['', [Validators.maxLength(200)]],
+    icon:        ['bi-tag']
   });
 
   filtered = computed<Category[]>(() => {
@@ -68,15 +88,19 @@ export class CategoriesComponent implements OnInit {
   openCreate(): void {
     this.editing.set(null);
     this.submitted.set(false);
-    this.form.reset({ name: '', description: '' });
+    this.form.reset({ name: '', description: '', icon: 'bi-tag' });
     this.showModal.set(true);
   }
 
   openEdit(c: Category): void {
     this.editing.set(c);
     this.submitted.set(false);
-    this.form.reset({ name: c.name, description: c.description || '' });
+    this.form.reset({ name: c.name, description: c.description || '', icon: c.icon || 'bi-tag' });
     this.showModal.set(true);
+  }
+
+  selectedIcon(): string {
+    return this.form.get('icon')?.value || 'bi-tag';
   }
 
   closeModal(): void { this.showModal.set(false); }

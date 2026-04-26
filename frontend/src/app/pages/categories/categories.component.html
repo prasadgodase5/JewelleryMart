@@ -64,6 +64,18 @@
     </div>
 
     <div>
+      <label class="app-label">Icon</label>
+      <div class="icon-row">
+        <div class="icon-preview"><i class="bi" [ngClass]="selectedIcon()"></i></div>
+        <select class="app-input" formControlName="icon">
+          <option *ngFor="let opt of iconOptions" [value]="opt.value">
+            {{ opt.label }} ({{ opt.value }})
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div>
       <label class="app-label">Description</label>
       <textarea class="app-input" rows="3" formControlName="description"
                 placeholder="Optional description"
