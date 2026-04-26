@@ -30,6 +30,8 @@ export interface Order {
   paymentMode?: string;
   createdAt?: string;
   paidAt?: string;
+  paymentId?: string;
+  razorpayOrderId?: string;
 }
 
 export interface User {

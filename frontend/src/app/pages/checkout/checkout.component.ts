@@ -38,6 +38,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   order = signal<Order | null>(null);
   qrDataUrl = signal<string>('');
   remaining = signal<number>(300);
+  paying = signal<boolean>(false);
+  paymentEnabled = signal<boolean>(false);
   expired = computed(() => this.remaining() <= 0 && this.order()?.status !== 'Paid');
 
   private intervalId: any = null;
@@ -64,6 +66,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
+    this.api.paymentConfig().subscribe({
+      next: cfg => this.paymentEnabled.set(!!cfg.enabled),
+      error: () => this.paymentEnabled.set(false)
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.api.getOrder(+id).subscribe({
@@ -154,17 +161,85 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
   }
 
-  confirmPaid(): void {
+  payNow(): void {
     const o = this.order();
     if (!o) return;
-    this.api.confirmPayment(o.id!).subscribe({
-      next: updated => {
-        this.order.set(updated);
-        this.toast.success('Payment confirmed');
-        this.stopTimer();
-      },
-      error: () => this.toast.error('Confirmation failed')
+    if (!this.paymentEnabled()) {
+      this.toast.error('Razorpay not configured. Add API keys to backend/.env');
+      return;
+    }
+    if (typeof (window as any).Razorpay !== 'function') {
+      this.toast.error('Payment SDK not loaded yet. Please retry in a moment.');
+      return;
+    }
+    if (this.paying()) return;
+    this.paying.set(true);
+
+    this.api.createPaymentOrder(o.id!).subscribe({
+      next: rp => this.openRazorpayCheckout(rp, o),
+      error: err => {
+        this.paying.set(false);
+        const msg = err?.error?.error || 'Failed to start payment';
+        const hint = err?.error?.hint;
+        this.toast.error(hint ? `${msg} — ${hint}` : msg);
+      }
     });
+  }
+
+  private openRazorpayCheckout(rp: { keyId: string; orderId: string; amount: number; currency: string; localOrderId: number; customer: string }, localOrder: Order): void {
+    const opts: RazorpayOptions = {
+      key: rp.keyId,
+      amount: rp.amount,
+      currency: rp.currency,
+      name: 'PG E-Mart',
+      description: `Order #${localOrder.id}`,
+      order_id: rp.orderId,
+      prefill: {
+        name: rp.customer || this.auth.username(),
+        contact: this.auth.phone()
+      },
+      theme: { color: '#6366f1' },
+      method: { upi: true, card: true, netbanking: true, wallet: true },
+      handler: (resp: RazorpayHandlerResponse) => {
+        this.api.verifyPayment({
+          razorpay_order_id: resp.razorpay_order_id,
+          razorpay_payment_id: resp.razorpay_payment_id,
+          razorpay_signature: resp.razorpay_signature,
+          localOrderId: rp.localOrderId
+        }).subscribe({
+          next: updated => {
+            this.order.set(updated);
+            this.stopTimer();
+            this.paying.set(false);
+            this.toast.success(`Payment successful · ${resp.razorpay_payment_id}`);
+          },
+          error: () => {
+            this.paying.set(false);
+            this.toast.error('Payment captured but verification failed. Contact support.');
+          }
+        });
+      },
+      modal: {
+        ondismiss: () => {
+          this.paying.set(false);
+          this.toast.info('Payment cancelled');
+        },
+        escape: true
+      }
+    };
+
+    try {
+      const rz = new (window as any).Razorpay(opts);
+      rz.on('payment.failed', (resp: any) => {
+        this.paying.set(false);
+        const reason = resp?.error?.description || 'Payment failed';
+        this.toast.error(reason);
+      });
+      rz.open();
+    } catch (e) {
+      this.paying.set(false);
+      this.toast.error('Could not open Razorpay checkout');
+    }
   }
 
   reset(): void {

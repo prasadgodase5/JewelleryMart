@@ -2,6 +2,7 @@ node_modules/
 dist/
 .angular/
 .env
+backend/.env
 *.log
 .DS_Store
 Thumbs.db

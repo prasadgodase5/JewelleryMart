@@ -33,9 +33,31 @@ export class ApiService {
   updateUser(id: number, u: User) { return this.http.put<User>(`${this.base}/users/${id}`, u); }
   deleteUser(id: number) { return this.http.delete<User>(`${this.base}/users/${id}`); }
 
-  // Payment
-  confirmPayment(orderId: number) { return this.http.post<Order>(`${this.base}/confirm-payment`, { orderId }); }
+  // Payment - simulated
   expirePayment(orderId: number) { return this.http.post<Order>(`${this.base}/expire-payment`, { orderId }); }
+
+  // Payment - Razorpay (real UPI)
+  paymentConfig() {
+    return this.http.get<{ enabled: boolean; keyId: string | null; provider: string | null }>(`${this.base}/payments/config`);
+  }
+  createPaymentOrder(orderId: number) {
+    return this.http.post<{
+      keyId: string;
+      orderId: string;
+      amount: number;
+      currency: string;
+      localOrderId: number;
+      customer: string;
+    }>(`${this.base}/payments/create-order`, { orderId });
+  }
+  verifyPayment(payload: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+    localOrderId: number;
+  }) {
+    return this.http.post<Order>(`${this.base}/payments/verify`, payload);
+  }
 
   // Stats
   stats(): Observable<Stats> { return this.http.get<Stats>(`${this.base}/stats`); }

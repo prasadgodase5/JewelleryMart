@@ -37,7 +37,7 @@
     </form>
   </div>
 
-  <!-- Step 2: QR + countdown -->
+  <!-- Step 2: QR + countdown + Pay Now -->
   <div *ngIf="order() as o" class="app-card payment-card">
     <div class="pay-grid">
       <div class="pay-info">
@@ -52,14 +52,19 @@
         <div class="instructions">
           <p class="title">How to pay</p>
           <ol>
-            <li>Scan the QR using any UPI app (GPay, PhonePe, Paytm)</li>
-            <li>Complete the payment</li>
-            <li>Tap <strong>"I Have Paid"</strong> below</li>
+            <li>Click <strong>"Pay Now"</strong> to open the secure Razorpay checkout</li>
+            <li>Choose UPI and enter your UPI ID, or scan the QR shown there</li>
+            <li>Approve the request in your UPI app — your order is confirmed automatically</li>
           </ol>
+          <p class="alt-tip">
+            <i class="bi bi-info-circle"></i>
+            You can also scan the QR on the right with any UPI app, but auto-confirmation only happens through the Razorpay flow.
+          </p>
         </div>
 
         <div class="timer-box"
-             [ngClass]="expired() ? 'timer-expired' : 'timer-running'">
+             [ngClass]="expired() ? 'timer-expired' : 'timer-running'"
+             *ngIf="o.status !== 'Paid'">
           <div>
             <div class="timer-label">Time remaining</div>
             <div class="timer-value">{{ mmss() }}</div>
@@ -67,12 +72,32 @@
           <span class="app-badge" [ngClass]="paidBadgeClass()">{{ o.status }}</span>
         </div>
 
+        <div class="paid-banner" *ngIf="o.status === 'Paid'">
+          <i class="bi bi-check-circle-fill"></i>
+          <div>
+            <div class="paid-title">Payment Successful</div>
+            <div class="paid-meta" *ngIf="o.paymentId">ID: {{ o.paymentId }}</div>
+            <div class="paid-meta" *ngIf="o.paidAt">{{ o.paidAt | date:'medium' }}</div>
+          </div>
+        </div>
+
+        <div class="config-warn" *ngIf="!paymentEnabled() && o.status !== 'Paid'">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div>
+            <strong>Razorpay is not configured.</strong>
+            Add <code>RAZORPAY_KEY_ID</code> and <code>RAZORPAY_KEY_SECRET</code> to
+            <code>backend/.env</code> and restart the backend to enable real payments.
+          </div>
+        </div>
+
         <div class="action-row">
           <button type="button"
-                  class="app-btn app-btn-primary"
-                  [disabled]="o.status === 'Paid' || expired()"
-                  (click)="confirmPaid()">
-            <i class="bi bi-check2-circle"></i> I Have Paid
+                  class="pay-now-btn"
+                  *ngIf="o.status !== 'Paid'"
+                  [disabled]="!paymentEnabled() || expired() || paying()"
+                  (click)="payNow()">
+            <i class="bi" [ngClass]="paying() ? 'bi-arrow-repeat spin' : 'bi-lightning-charge-fill'"></i>
+            {{ paying() ? 'Opening checkout…' : 'Pay ₹' + o.amount + ' via UPI' }}
           </button>
           <button type="button" class="app-btn app-btn-secondary" (click)="reset()">
             <i class="bi bi-arrow-counterclockwise"></i> New Order
@@ -88,6 +113,7 @@
           <img *ngIf="qrDataUrl()" [src]="qrDataUrl()" alt="UPI QR" class="qr-img" />
           <div *ngIf="!qrDataUrl()" class="qr-placeholder">Generating…</div>
         </div>
+        <div class="qr-caption">Scan with any UPI app</div>
         <div class="upi-uri">{{ upiUri() }}</div>
       </div>
     </div>

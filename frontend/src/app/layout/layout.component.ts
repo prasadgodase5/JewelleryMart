@@ -40,9 +40,8 @@ export class LayoutComponent {
       ];
     }
     return [
-      { label: 'Shop',         route: '/user/shop',        icon: 'bi-shop' },
-      { label: 'Add Product',  route: '/user/add-product', icon: 'bi-plus-circle' },
-      { label: 'My Orders',    route: '/user/orders',      icon: 'bi-bag-check' }
+      { label: 'Shop',       route: '/user/shop',   icon: 'bi-shop' },
+      { label: 'My Orders',  route: '/user/orders', icon: 'bi-bag-check' }
     ];
   });
 

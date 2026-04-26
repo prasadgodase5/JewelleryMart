@@ -114,6 +114,21 @@
       "paymentMode": "UPI",
       "id": 1004,
       "createdAt": "2026-04-26T10:11:12.505Z"
+    },
+    {
+      "customer": "prasad",
+      "items": [
+        {
+          "productId": 5,
+          "qty": 1
+        }
+      ],
+      "amount": 349,
+      "status": "Paid",
+      "paymentMode": "UPI",
+      "id": 1005,
+      "createdAt": "2026-04-26T10:29:11.618Z",
+      "paidAt": "2026-04-26T10:29:20.079Z"
     }
   ],
   "users": [

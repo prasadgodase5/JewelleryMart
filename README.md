@@ -20,9 +20,25 @@ AngularCrudWithNode/
 ```bash
 cd backend
 npm install
+cp .env.example .env       # then edit .env with your Razorpay test keys
 npm start
 ```
 Runs at `http://localhost:3000`.
+
+#### Real UPI payments (Razorpay)
+The checkout uses **Razorpay** for real UPI payments. To enable it:
+1. Create a free Razorpay account at https://razorpay.com.
+2. Dashboard → Settings → API Keys → **Generate Test Keys**.
+3. Paste them in `backend/.env`:
+   ```
+   RAZORPAY_KEY_ID=rzp_test_XXXXXXXX
+   RAZORPAY_KEY_SECRET=YOUR_TEST_SECRET
+   ```
+4. Restart the backend. The checkout page will pick up the keys automatically.
+
+In test mode you can pay with the test UPI ID `success@razorpay` (succeeds) or `failure@razorpay` (fails). No real money moves.
+
+If keys are missing, the checkout shows a configuration banner and the **Pay Now** button is disabled.
 
 ### 2. Frontend
 In a second terminal:
@@ -49,7 +65,10 @@ Runs at `http://localhost:4200`. The frontend proxies `/api/*` to the backend.
 | PUT    | /api/products/:id      | Update product |
 | DELETE | /api/products/:id      | Delete product |
 | (same pattern for /api/categories, /api/orders, /api/users) |
-| POST   | /api/confirm-payment   | Mark order as Paid |
+| GET    | /api/payments/config       | Returns whether Razorpay is enabled |
+| POST   | /api/payments/create-order | Creates Razorpay order for a local order |
+| POST   | /api/payments/verify       | Verifies signature and marks order Paid |
+| POST   | /api/expire-payment        | Marks pending order Expired |
 
 ## Sample db.json
 Sample data is auto-seeded if `db.json` is missing.
