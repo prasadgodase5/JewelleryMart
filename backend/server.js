@@ -44,7 +44,29 @@ function nextId(collection) {
   return Math.max(...collection.map(x => Number(x.id) || 0)) + 1;
 }
 
-// Generic CRUD factory
+function stripPassword(user) {
+  if (!user) return user;
+  const { password, ...safe } = user;
+  return safe;
+}
+
+function decrementStock(db, items) {
+  for (const item of items || []) {
+    const p = (db.products || []).find(p => String(p.id) === String(item.productId));
+    if (p) p.stock = Math.max(0, (Number(p.stock) || 0) - (Number(item.qty) || 1));
+  }
+}
+
+function restoreStock(db, items) {
+  for (const item of items || []) {
+    const p = (db.products || []).find(p => String(p.id) === String(item.productId));
+    if (p) p.stock = (Number(p.stock) || 0) + (Number(item.qty) || 1);
+  }
+}
+
+// ============================================================
+// Generic CRUD factory (used for products and categories only)
+// ============================================================
 function registerCrud(resource, idField = 'id') {
   app.get(`/api/${resource}`, (req, res) => {
     const db = readDb();
@@ -89,11 +111,179 @@ function registerCrud(resource, idField = 'id') {
   });
 }
 
-['products', 'categories', 'orders', 'users'].forEach(r => registerCrud(r));
+['products', 'categories'].forEach(r => registerCrud(r));
 
-// ===== Razorpay payment endpoints =====
+// ============================================================
+// Users (with username + password — passwords never leave the server)
+// ============================================================
+app.get('/api/users', (req, res) => {
+  const db = readDb();
+  res.json((db.users || []).map(stripPassword));
+});
 
-// Frontend asks the backend whether real payment is available
+app.get('/api/users/:id', (req, res) => {
+  const db = readDb();
+  const u = (db.users || []).find(x => String(x.id) === String(req.params.id));
+  if (!u) return res.status(404).json({ error: 'Not found' });
+  res.json(stripPassword(u));
+});
+
+app.post('/api/users', (req, res) => {
+  const db = readDb();
+  db.users = db.users || [];
+
+  const { username, password, name, email, role, phone } = req.body || {};
+  if (!username || !password || !name || !role) {
+    return res.status(400).json({ error: 'name, username, password and role are required' });
+  }
+  if (db.users.some(u => (u.username || '').toLowerCase() === username.toLowerCase())) {
+    return res.status(409).json({ error: 'Username already taken' });
+  }
+
+  const user = {
+    id: nextId(db.users),
+    name, email: email || '',
+    username: String(username).trim(),
+    password: String(password),
+    role,
+    phone: phone || '',
+    createdAt: new Date().toISOString()
+  };
+  db.users.push(user);
+  writeDb(db);
+  res.status(201).json(stripPassword(user));
+});
+
+app.put('/api/users/:id', (req, res) => {
+  const db = readDb();
+  const list = db.users || [];
+  const idx = list.findIndex(x => String(x.id) === String(req.params.id));
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+
+  const existing = list[idx];
+  const { username, password, name, email, role, phone } = req.body || {};
+
+  if (username && username.toLowerCase() !== (existing.username || '').toLowerCase()) {
+    if (list.some(u => u.id !== existing.id && (u.username || '').toLowerCase() === username.toLowerCase())) {
+      return res.status(409).json({ error: 'Username already taken' });
+    }
+  }
+
+  list[idx] = {
+    ...existing,
+    name: name ?? existing.name,
+    email: email ?? existing.email,
+    username: username ?? existing.username,
+    password: password && String(password).trim() ? String(password) : existing.password,
+    role: role ?? existing.role,
+    phone: phone ?? existing.phone
+  };
+  writeDb(db);
+  res.json(stripPassword(list[idx]));
+});
+
+app.delete('/api/users/:id', (req, res) => {
+  const db = readDb();
+  const list = db.users || [];
+  const idx = list.findIndex(x => String(x.id) === String(req.params.id));
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+  const [removed] = list.splice(idx, 1);
+  writeDb(db);
+  res.json(stripPassword(removed));
+});
+
+// ============================================================
+// Auth
+// ============================================================
+app.post('/api/auth/login', (req, res) => {
+  const { username, password, role } = req.body || {};
+  if (!username || !password) return res.status(400).json({ error: 'username and password required' });
+
+  const db = readDb();
+  const user = (db.users || []).find(u =>
+    (u.username || '').toLowerCase() === String(username).toLowerCase().trim() &&
+    u.password === password &&
+    (!role || u.role === role)
+  );
+
+  if (!user) {
+    const existsAtAll = (db.users || []).some(u =>
+      (u.username || '').toLowerCase() === String(username).toLowerCase().trim() &&
+      u.password === password
+    );
+    if (existsAtAll) return res.status(403).json({ error: 'This account is not authorised for the selected panel' });
+    return res.status(401).json({ error: 'Invalid username or password' });
+  }
+
+  res.json(stripPassword(user));
+});
+
+// ============================================================
+// Orders (with stock decrement / restore)
+// ============================================================
+app.get('/api/orders', (req, res) => {
+  const db = readDb();
+  res.json(db.orders || []);
+});
+
+app.get('/api/orders/:id', (req, res) => {
+  const db = readDb();
+  const o = (db.orders || []).find(x => String(x.id) === String(req.params.id));
+  if (!o) return res.status(404).json({ error: 'Not found' });
+  res.json(o);
+});
+
+app.post('/api/orders', (req, res) => {
+  const db = readDb();
+  db.orders = db.orders || [];
+
+  const order = {
+    ...req.body,
+    id: nextId(db.orders),
+    createdAt: new Date().toISOString()
+  };
+
+  // Validate stock for each line item before committing
+  for (const item of order.items || []) {
+    const p = (db.products || []).find(p => String(p.id) === String(item.productId));
+    if (!p) return res.status(400).json({ error: `Product ${item.productId} not found` });
+    if ((p.stock || 0) < (item.qty || 1)) {
+      return res.status(409).json({ error: `Only ${p.stock} of "${p.name}" in stock` });
+    }
+  }
+
+  decrementStock(db, order.items);
+  db.orders.push(order);
+  writeDb(db);
+  res.status(201).json(order);
+});
+
+app.put('/api/orders/:id', (req, res) => {
+  const db = readDb();
+  const list = db.orders || [];
+  const idx = list.findIndex(x => String(x.id) === String(req.params.id));
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+  const updated = { ...list[idx], ...req.body, id: list[idx].id };
+  list[idx] = updated;
+  writeDb(db);
+  res.json(updated);
+});
+
+app.delete('/api/orders/:id', (req, res) => {
+  const db = readDb();
+  const list = db.orders || [];
+  const idx = list.findIndex(x => String(x.id) === String(req.params.id));
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+  const [removed] = list.splice(idx, 1);
+  // Restore stock unless the order was already expired (stock was already restored)
+  if (removed.status !== 'Expired') restoreStock(db, removed.items);
+  writeDb(db);
+  res.json(removed);
+});
+
+// ============================================================
+// Razorpay payment endpoints
+// ============================================================
 app.get('/api/payments/config', (req, res) => {
   res.json({
     enabled: !!razorpay,
@@ -102,7 +292,6 @@ app.get('/api/payments/config', (req, res) => {
   });
 });
 
-// Create a Razorpay order for an existing local order
 app.post('/api/payments/create-order', async (req, res) => {
   if (!razorpay) {
     return res.status(503).json({
@@ -120,7 +309,7 @@ app.post('/api/payments/create-order', async (req, res) => {
 
   try {
     const amount = Math.round(Number(localOrder.amount) * 100);
-    if (!amount || amount < 100) return res.status(400).json({ error: 'Amount must be at least ₹1' });
+    if (!amount || amount < 100) return res.status(400).json({ error: 'Amount must be at least Rs 1' });
 
     const rpOrder = await razorpay.orders.create({
       amount,
@@ -143,7 +332,6 @@ app.post('/api/payments/create-order', async (req, res) => {
   }
 });
 
-// Verify Razorpay signature and mark order Paid
 app.post('/api/payments/verify', (req, res) => {
   if (!razorpay) return res.status(503).json({ error: 'Razorpay not configured' });
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, localOrderId } = req.body || {};
@@ -173,7 +361,7 @@ app.post('/api/payments/verify', (req, res) => {
   res.json(order);
 });
 
-// Mark order expired (used when timer runs out)
+// Mark order expired (used when timer runs out) — restores stock
 app.post('/api/expire-payment', (req, res) => {
   const { orderId } = req.body || {};
   const db = readDb();
@@ -181,6 +369,7 @@ app.post('/api/expire-payment', (req, res) => {
   if (!order) return res.status(404).json({ error: 'Order not found' });
   if (order.status === 'Pending') {
     order.status = 'Expired';
+    restoreStock(db, order.items);
     writeDb(db);
   }
   res.json(order);
@@ -194,7 +383,8 @@ app.get('/api/stats', (req, res) => {
     categories: (db.categories || []).length,
     orders: (db.orders || []).length,
     users: (db.users || []).length,
-    revenue: (db.orders || []).filter(o => o.status === 'Paid' || o.status === 'Delivered' || o.status === 'Shipped').reduce((s, o) => s + (Number(o.amount) || 0), 0)
+    revenue: (db.orders || []).filter(o => o.status === 'Paid' || o.status === 'Delivered' || o.status === 'Shipped').reduce((s, o) => s + (Number(o.amount) || 0), 0),
+    lowStock: (db.products || []).filter(p => (p.stock || 0) <= 5).length
   });
 });
 

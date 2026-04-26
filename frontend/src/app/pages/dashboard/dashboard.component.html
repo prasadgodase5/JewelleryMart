@@ -1,4 +1,14 @@
 <section class="dashboard">
+  <div class="page-head-row">
+    <div>
+      <h2>Welcome back 👋</h2>
+      <p class="muted">Here's what's happening at PG E-Mart right now.</p>
+    </div>
+    <button type="button" class="app-btn app-btn-secondary" (click)="refresh()">
+      <i class="bi bi-arrow-clockwise"></i> Refresh
+    </button>
+  </div>
+
   <div class="stat-grid">
     <div class="stat-card" *ngFor="let c of cards()" [ngClass]="c.variant">
       <div class="stat-icon"><i class="bi {{ c.icon }}"></i></div>
@@ -12,7 +22,7 @@
   <div class="dashboard-grid">
     <div class="app-card recent-orders">
       <div class="section-head">
-        <h3>Recent Orders</h3>
+        <h3><i class="bi bi-receipt"></i> Recent Orders</h3>
         <a routerLink="/admin/orders" class="link-brand">View all</a>
       </div>
 
@@ -31,11 +41,11 @@
             <tr *ngFor="let o of recent()">
               <td class="font-medium">#{{ o.id }}</td>
               <td>{{ o.customer }}</td>
-              <td>₹{{ o.amount }}</td>
+              <td>₹{{ o.amount | number:'1.0-0' }}</td>
               <td>
                 <span class="app-badge" [ngClass]="badgeClass(o.status)">{{ o.status }}</span>
               </td>
-              <td class="muted">{{ o.createdAt | date:'short' }}</td>
+              <td class="muted-small">{{ o.createdAt | date:'short' }}</td>
             </tr>
             <tr *ngIf="!recent().length">
               <td colspan="5" class="empty">No orders yet</td>
@@ -45,8 +55,36 @@
       </div>
     </div>
 
+    <div class="app-card low-stock">
+      <div class="section-head">
+        <h3><i class="bi bi-exclamation-triangle text-warning"></i> Low / Out of Stock</h3>
+        <a routerLink="/admin/products" class="link-brand">Manage</a>
+      </div>
+
+      <ul class="stock-list" *ngIf="lowStockItems().length; else allStocked">
+        <li *ngFor="let p of lowStockItems()">
+          <img *ngIf="p.image" [src]="p.image" class="stock-thumb" alt=""
+               (error)="$any($event.target).style.display='none'" />
+          <div class="stock-info">
+            <div class="stock-name" [title]="p.name">{{ p.name }}</div>
+            <div class="stock-price">₹{{ p.price | number:'1.0-0' }}</div>
+          </div>
+          <span class="app-badge" [ngClass]="stockBadge(p.stock)">
+            {{ p.stock > 0 ? p.stock + ' left' : 'OUT' }}
+          </span>
+        </li>
+      </ul>
+
+      <ng-template #allStocked>
+        <div class="all-stocked">
+          <i class="bi bi-check-circle-fill"></i>
+          <p>All products are well stocked.</p>
+        </div>
+      </ng-template>
+    </div>
+
     <div class="app-card quick-actions">
-      <h3>Quick Actions</h3>
+      <h3><i class="bi bi-lightning-charge"></i> Quick Actions</h3>
       <div class="action-list">
         <a routerLink="/admin/products"   class="app-btn app-btn-secondary"><i class="bi bi-box-seam"></i> Manage Products</a>
         <a routerLink="/admin/categories" class="app-btn app-btn-secondary"><i class="bi bi-tags"></i> Manage Categories</a>

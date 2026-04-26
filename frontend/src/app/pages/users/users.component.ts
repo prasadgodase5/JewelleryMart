@@ -30,12 +30,15 @@ export class UsersComponent implements OnInit {
   showModal = signal<boolean>(false);
   editing = signal<User | null>(null);
   submitted = signal<boolean>(false);
+  showPassword = signal<boolean>(false);
 
   form: FormGroup = this.fb.group({
-    name:  ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
-    email: ['', [Validators.required, Validators.email, Validators.maxLength(120)]],
-    phone: ['', [Validators.pattern(/^\d{10}$/)]],
-    role:  ['customer' as 'customer' | 'admin', [Validators.required]]
+    name:     ['', [Validators.required, Validators.minLength(2), Validators.maxLength(60)]],
+    username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40), Validators.pattern(/^[a-zA-Z0-9._-]+$/)]],
+    password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(40)]],
+    email:    ['', [Validators.required, Validators.email, Validators.maxLength(120)]],
+    phone:    ['', [Validators.pattern(/^\d{10}$/)]],
+    role:     ['customer' as 'customer' | 'admin', [Validators.required]]
   });
 
   filtered = computed<User[]>(() => {
@@ -43,6 +46,7 @@ export class UsersComponent implements OnInit {
     const q = this.search().toLowerCase().trim();
     if (q) list = list.filter(u =>
       u.name.toLowerCase().includes(q) ||
+      (u.username || '').toLowerCase().includes(q) ||
       u.email.toLowerCase().includes(q)
     );
     if (this.roleFilter()) list = list.filter(u => u.role === this.roleFilter());
@@ -71,23 +75,44 @@ export class UsersComponent implements OnInit {
     return errKey ? c.hasError(errKey) : c.invalid;
   }
 
+  togglePassword() { this.showPassword.update(v => !v); }
+
   openCreate(): void {
     this.editing.set(null);
     this.submitted.set(false);
-    this.form.reset({ name: '', email: '', phone: '', role: 'customer' });
+    this.showPassword.set(false);
+    const passwordCtrl = this.form.get('password')!;
+    passwordCtrl.setValidators([Validators.required, Validators.minLength(4), Validators.maxLength(40)]);
+    passwordCtrl.updateValueAndValidity();
+    this.form.reset({ name: '', username: '', password: '', email: '', phone: '', role: 'customer' });
+    this.form.get('username')!.enable();
     this.showModal.set(true);
   }
 
   openEdit(u: User): void {
     this.editing.set(u);
     this.submitted.set(false);
+    this.showPassword.set(false);
+    // Password becomes optional on edit
+    const passwordCtrl = this.form.get('password')!;
+    passwordCtrl.setValidators([Validators.minLength(4), Validators.maxLength(40)]);
+    passwordCtrl.updateValueAndValidity();
     this.form.reset({
-      name: u.name, email: u.email, phone: u.phone || '', role: u.role
+      name: u.name,
+      username: u.username,
+      password: '',
+      email: u.email,
+      phone: u.phone || '',
+      role: u.role
     });
     this.showModal.set(true);
   }
 
   closeModal(): void { this.showModal.set(false); }
+
+  passwordHint(): string {
+    return this.editing() ? 'Leave blank to keep the current password' : 'Min 4 characters';
+  }
 
   save(): void {
     this.submitted.set(true);
@@ -96,16 +121,25 @@ export class UsersComponent implements OnInit {
       this.toast.warn('Please fix the highlighted fields');
       return;
     }
-    const payload = this.form.getRawValue() as User;
+    const raw = this.form.getRawValue() as User & { password: string };
+    const payload: Partial<User> = {
+      name: raw.name,
+      username: raw.username,
+      email: raw.email,
+      phone: raw.phone,
+      role: raw.role
+    };
+    if (raw.password && raw.password.trim()) payload.password = raw.password;
+
     if (this.editing()) {
       this.api.updateUser(this.editing()!.id!, payload).subscribe({
         next: () => { this.toast.success('User updated'); this.closeModal(); this.refresh(); },
-        error: () => this.toast.error('Update failed')
+        error: err => this.toast.error(err?.error?.error || 'Update failed')
       });
     } else {
-      this.api.createUser(payload).subscribe({
+      this.api.createUser(payload as User).subscribe({
         next: () => { this.toast.success('User created'); this.closeModal(); this.refresh(); },
-        error: () => this.toast.error('Create failed')
+        error: err => this.toast.error(err?.error?.error || 'Create failed')
       });
     }
   }
@@ -113,13 +147,13 @@ export class UsersComponent implements OnInit {
   async remove(u: User): Promise<void> {
     const ok = await this.confirm.ask(
       'Delete user',
-      `Delete user "${u.name}"? This cannot be undone.`,
+      `Delete user "${u.name}" (${u.username})? This cannot be undone.`,
       'Delete'
     );
     if (!ok) return;
     this.api.deleteUser(u.id!).subscribe({
       next: () => { this.toast.success('User deleted'); this.refresh(); },
-      error: () => this.toast.error('Delete failed')
+      error: err => this.toast.error(err?.error?.error || 'Delete failed')
     });
   }
 }

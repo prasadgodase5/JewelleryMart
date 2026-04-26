@@ -130,8 +130,11 @@
   box-shadow: 0 10px 22px rgba(99,102,241,.32);
   transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
 }
-.login-submit:hover { transform: translateY(-1px); filter: brightness(1.05); }
-.login-submit:active { transform: translateY(0); }
+.login-submit:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.05); }
+.login-submit:active:not(:disabled) { transform: translateY(0); }
+.login-submit:disabled { opacity: .7; cursor: not-allowed; }
+.spin { animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .hint-box {
   margin-top: .75rem;

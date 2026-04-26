@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   role = signal<UserRole>('user');
   showPassword = signal<boolean>(false);
   submitted = signal<boolean>(false);
+  loading = signal<boolean>(false);
   errorMsg = signal<string>('');
 
   form: FormGroup = this.fb.group({
@@ -54,17 +55,29 @@ export class LoginComponent implements OnInit {
       return;
     }
     const { username, password } = this.form.value;
-    const ok = this.auth.login(username!, password!, this.role());
-    if (ok) {
-      this.toast.success(`Welcome, ${this.auth.username()}!`);
-      this.router.navigate([this.auth.defaultLanding()]);
-    } else {
-      this.errorMsg.set('Invalid credentials. Use prasad / 9604 to sign in.');
-      this.toast.error('Invalid credentials');
-    }
+    this.loading.set(true);
+    this.auth.login(username!, password!, this.role()).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.toast.success(`Welcome, ${this.auth.fullName() || this.auth.username()}!`);
+        this.router.navigate([this.auth.defaultLanding()]);
+      },
+      error: err => {
+        this.loading.set(false);
+        const msg = err?.message || 'Login failed';
+        this.errorMsg.set(msg);
+        this.toast.error(msg);
+      }
+    });
   }
 
   roleLabel(): string {
     return this.role() === 'admin' ? 'Admin' : 'User';
+  }
+
+  demoCreds(): { user: string; pass: string } {
+    return this.role() === 'admin'
+      ? { user: 'admin',  pass: 'admin123' }
+      : { user: 'prasad', pass: '9604' };
   }
 }

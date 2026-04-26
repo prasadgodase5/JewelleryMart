@@ -1,36 +1,49 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { ApiService } from './api.service';
 
 export type UserRole = 'user' | 'admin';
 
 export interface AuthUser {
   username: string;
+  name: string;
   role: UserRole;
   phone: string;
 }
 
 const STORAGE_KEY = 'pg_emart_auth';
-const VALID_USERNAME = 'prasad';
-const VALID_PASSWORD = '9604';
-const USER_PHONE = '9604062216';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private api = inject(ApiService);
   private current = signal<AuthUser | null>(this.loadInitial());
 
   user = computed(() => this.current());
   isAuthenticated = computed(() => this.current() !== null);
   role = computed(() => this.current()?.role ?? null);
   username = computed(() => this.current()?.username ?? '');
+  fullName = computed(() => this.current()?.name ?? '');
   phone = computed(() => this.current()?.phone ?? '');
 
-  login(username: string, password: string, role: UserRole): boolean {
-    if (username.trim().toLowerCase() === VALID_USERNAME && password === VALID_PASSWORD) {
-      const u: AuthUser = { username: VALID_USERNAME, role, phone: USER_PHONE };
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(u)); } catch {}
-      this.current.set(u);
-      return true;
-    }
-    return false;
+  login(username: string, password: string, role: UserRole): Observable<boolean> {
+    const apiRole: 'admin' | 'customer' = role === 'admin' ? 'admin' : 'customer';
+    return this.api.login(username, password, apiRole).pipe(
+      map(u => {
+        const local: AuthUser = {
+          username: u.username,
+          name: u.name,
+          role: u.role === 'admin' ? 'admin' : 'user',
+          phone: u.phone || ''
+        };
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(local)); } catch {}
+        this.current.set(local);
+        return true;
+      }),
+      catchError(err => {
+        const msg = err?.error?.error || err?.message || 'Login failed';
+        return throwError(() => new Error(msg));
+      })
+    );
   }
 
   logout(): void {

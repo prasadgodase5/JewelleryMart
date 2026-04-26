@@ -41,9 +41,12 @@ export interface Order {
 export interface User {
   id?: number;
   name: string;
+  username: string;
+  password?: string;
   email: string;
   role: 'admin' | 'customer';
   phone?: string;
+  createdAt?: string;
 }
 
 export interface Stats {
@@ -52,4 +55,5 @@ export interface Stats {
   orders: number;
   users: number;
   revenue: number;
+  lowStock?: number;
 }

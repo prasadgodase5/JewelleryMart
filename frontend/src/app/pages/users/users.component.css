@@ -26,6 +26,30 @@
 .danger-text { color: #dc2626; }
 .danger-text:hover { background: #fef2f2; }
 
+.username-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #4338ca;
+  background: #eef2ff;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+.username-tag i { font-size: .8rem; }
+
+.phone-link {
+  color: #475569;
+  text-decoration: none;
+  display: inline-flex;
+  gap: .25rem;
+  align-items: center;
+}
+.phone-link:hover { color: #4338ca; }
+.phone-link i { font-size: .8rem; color: #6366f1; }
+
 /* Form */
 .form-grid {
   display: grid;
@@ -39,3 +63,38 @@
   gap: .5rem;
   padding-top: .25rem;
 }
+
+.input-group { position: relative; }
+.input-prefix {
+  position: absolute;
+  left: .75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+.with-prefix { padding-left: 2.25rem; }
+.with-suffix { padding-right: 2.5rem; }
+.input-suffix-btn {
+  position: absolute;
+  right: .35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: .35rem .45rem;
+  font-size: 1rem;
+}
+.input-suffix-btn:hover { color: #1e293b; }
+
+.hint-line {
+  margin: .25rem 0 0;
+  font-size: .72rem;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+}
+.hint-line i { color: #6366f1; }

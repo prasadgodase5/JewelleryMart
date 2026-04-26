@@ -30,8 +30,13 @@ export class ApiService {
   // Users
   listUsers(): Observable<User[]> { return this.http.get<User[]>(`${this.base}/users`); }
   createUser(u: User) { return this.http.post<User>(`${this.base}/users`, u); }
-  updateUser(id: number, u: User) { return this.http.put<User>(`${this.base}/users/${id}`, u); }
+  updateUser(id: number, u: Partial<User>) { return this.http.put<User>(`${this.base}/users/${id}`, u); }
   deleteUser(id: number) { return this.http.delete<User>(`${this.base}/users/${id}`); }
+
+  // Auth
+  login(username: string, password: string, role: 'admin' | 'customer') {
+    return this.http.post<User>(`${this.base}/auth/login`, { username, password, role });
+  }
 
   // Payment - simulated
   expirePayment(orderId: number) { return this.http.post<Order>(`${this.base}/expire-payment`, { orderId }); }
