@@ -2,6 +2,9 @@ export interface Product {
   id?: number;
   name: string;
   price: number;
+  mrp?: number;
+  rating?: number;
+  ratingCount?: number;
   categoryId: number;
   stock: number;
   image?: string;

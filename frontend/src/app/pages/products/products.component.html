@@ -42,8 +42,9 @@
         <tbody>
           <tr *ngFor="let p of paged()">
             <td>
-              <img [src]="p.image || 'https://via.placeholder.com/60'"
-                   class="thumb" alt="" />
+              <img *ngIf="p.image" [src]="p.image" class="thumb" alt="" loading="lazy"
+                   (error)="$any($event.target).style.display='none'" />
+              <span *ngIf="!p.image" class="thumb-fallback"><i class="bi bi-image"></i></span>
             </td>
             <td class="font-medium">{{ p.name }}</td>
             <td>{{ catName(p.categoryId) }}</td>

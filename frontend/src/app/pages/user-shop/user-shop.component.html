@@ -4,7 +4,9 @@
       <h2>Hello, {{ username() }} 👋</h2>
       <p>Welcome to PG E-Mart Electronics — pick a category from the sidebar to start shopping.</p>
       <div class="hero-meta">
-        <span class="meta-pill"><i class="bi bi-telephone"></i> {{ phone() }}</span>
+        <a [href]="'tel:' + phone()" class="meta-pill clickable">
+          <i class="bi bi-telephone-fill"></i> {{ phone() }}
+        </a>
         <a routerLink="/user/cart" class="meta-pill clickable">
           <i class="bi bi-cart3"></i> Cart ({{ cart.count() }})
         </a>
@@ -46,25 +48,61 @@
   <div class="product-grid" *ngIf="filtered().length; else emptyTpl">
     <div class="product-card" *ngFor="let p of filtered()">
       <div class="product-thumb">
-        <img [src]="p.image || 'https://via.placeholder.com/300x200'" [alt]="p.name" />
-        <span class="app-badge thumb-badge" [ngClass]="stockClass(p.stock)">
+        <ng-container *ngIf="p.image && !isImageBroken(p.id); else fallbackTpl">
+          <img [src]="p.image" [alt]="p.name"
+               loading="lazy"
+               (error)="markImageError(p.id!)" />
+        </ng-container>
+        <ng-template #fallbackTpl>
+          <div class="thumb-fallback" [style.background]="catGradient(p.categoryId)">
+            <i class="bi" [ngClass]="catIcon(p.categoryId)"></i>
+          </div>
+        </ng-template>
+
+        <span class="discount-badge" *ngIf="discountPct(p) > 0">
+          {{ discountPct(p) }}% OFF
+        </span>
+        <span class="app-badge stock-badge" [ngClass]="stockClass(p.stock)">
           {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
         </span>
         <span class="cart-flag" *ngIf="cart.hasProduct(p.id!)">
-          <i class="bi bi-cart-check-fill"></i> In cart × {{ cart.qtyOf(p.id!) }}
+          <i class="bi bi-cart-check-fill"></i> × {{ cart.qtyOf(p.id!) }}
         </span>
       </div>
+
       <div class="product-body">
-        <div class="product-cat">{{ catName(p.categoryId) }}</div>
+        <div class="product-cat">
+          <i class="bi" [ngClass]="catIcon(p.categoryId)"></i>
+          {{ catName(p.categoryId) }}
+        </div>
         <h4 class="product-name" [title]="p.name">{{ p.name }}</h4>
-        <div class="product-price">₹{{ p.price | number:'1.0-0' }}</div>
+
+        <div class="rating-row" *ngIf="p.rating">
+          <span class="stars">
+            <i *ngFor="let _ of asArray(ratingStars(p.rating).full)" class="bi bi-star-fill"></i>
+            <i *ngIf="ratingStars(p.rating).half" class="bi bi-star-half"></i>
+            <i *ngFor="let _ of asArray(ratingStars(p.rating).empty)" class="bi bi-star"></i>
+          </span>
+          <span class="rating-num">{{ p.rating }}</span>
+          <span class="rating-count" *ngIf="p.ratingCount">({{ p.ratingCount | number:'1.0-0' }})</span>
+        </div>
+
+        <div class="price-row">
+          <span class="product-price">₹{{ p.price | number:'1.0-0' }}</span>
+          <span class="product-mrp" *ngIf="discountPct(p) > 0">₹{{ p.mrp | number:'1.0-0' }}</span>
+          <span class="product-saving" *ngIf="discountPct(p) > 0">
+            Save ₹{{ (p.mrp! - p.price) | number:'1.0-0' }}
+          </span>
+        </div>
+
         <div class="action-row">
           <button type="button"
                   class="cart-btn"
+                  [class.active]="cart.hasProduct(p.id!)"
                   [disabled]="p.stock <= 0"
                   (click)="addToCart(p)">
-            <i class="bi bi-cart-plus"></i>
-            Add to Cart
+            <i class="bi" [ngClass]="cart.hasProduct(p.id!) ? 'bi-cart-check-fill' : 'bi-cart-plus'"></i>
+            {{ cart.hasProduct(p.id!) ? 'Added' : 'Add to Cart' }}
           </button>
           <button type="button"
                   class="buy-btn"

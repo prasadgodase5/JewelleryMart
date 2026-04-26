@@ -9,6 +9,21 @@ import { Product, Category, Order } from '../../models/models';
 
 type SortKey = 'newest' | 'oldest' | 'priceAsc' | 'priceDesc';
 
+const CAT_GRADIENTS: Record<number, string> = {
+  1:  'linear-gradient(135deg, #0ea5e9, #1e40af)',
+  2:  'linear-gradient(135deg, #1e293b, #334155)',
+  3:  'linear-gradient(135deg, #06b6d4, #0e7490)',
+  4:  'linear-gradient(135deg, #6366f1, #4338ca)',
+  5:  'linear-gradient(135deg, #10b981, #047857)',
+  6:  'linear-gradient(135deg, #f59e0b, #d97706)',
+  7:  'linear-gradient(135deg, #f43f5e, #be123c)',
+  8:  'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+  9:  'linear-gradient(135deg, #ec4899, #be185d)',
+  10: 'linear-gradient(135deg, #475569, #1e293b)',
+  11: 'linear-gradient(135deg, #22c55e, #15803d)',
+  12: 'linear-gradient(135deg, #d946ef, #a21caf)'
+};
+
 @Component({
   selector: 'app-user-shop',
   standalone: true,
@@ -30,6 +45,7 @@ export class UserShopComponent implements OnInit {
   categoryFilter = signal<number>(0);
   sortBy = signal<SortKey>('newest');
   buyingId = signal<number | null>(null);
+  imageErrors = signal<Set<number>>(new Set());
 
   username = this.auth.username;
   phone = this.auth.phone;
@@ -80,10 +96,45 @@ export class UserShopComponent implements OnInit {
     return this.categories().find(c => c.id === id)?.name || '—';
   }
 
+  catIcon(id: number): string {
+    return this.categories().find(c => c.id === id)?.icon || 'bi-tag';
+  }
+
+  catGradient(id: number): string {
+    return CAT_GRADIENTS[id] || 'linear-gradient(135deg, #6366f1, #ec4899)';
+  }
+
   stockClass(stock: number): string {
     if (stock > 10) return 'badge-green';
     if (stock > 0)  return 'badge-amber';
     return 'badge-rose';
+  }
+
+  markImageError(productId: number): void {
+    const next = new Set(this.imageErrors());
+    next.add(productId);
+    this.imageErrors.set(next);
+  }
+
+  isImageBroken(productId?: number): boolean {
+    return !!productId && this.imageErrors().has(productId);
+  }
+
+  discountPct(p: Product): number {
+    if (!p.mrp || p.mrp <= p.price) return 0;
+    return Math.round(((p.mrp - p.price) / p.mrp) * 100);
+  }
+
+  ratingStars(rating?: number): { full: number; half: boolean; empty: number } {
+    const r = rating ?? 0;
+    const full = Math.floor(r);
+    const half = r - full >= 0.5;
+    const empty = 5 - full - (half ? 1 : 0);
+    return { full, half, empty: empty < 0 ? 0 : empty };
+  }
+
+  asArray(n: number): number[] {
+    return Array.from({ length: Math.max(0, n) });
   }
 
   addToCart(p: Product): void {

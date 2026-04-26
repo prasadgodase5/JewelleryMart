@@ -104,9 +104,14 @@
             <div class="um-avatar">{{ initial() }}</div>
             <div>
               <div class="um-name">{{ auth.username() }}</div>
-              <div class="um-phone">📱 {{ auth.phone() }}</div>
+              <a [href]="'tel:' + auth.phone()" class="um-phone">
+                <i class="bi bi-telephone-fill"></i> {{ auth.phone() }}
+              </a>
             </div>
           </div>
+          <a [href]="'tel:' + auth.phone()" class="um-item">
+            <i class="bi bi-telephone-outbound"></i> Call Support
+          </a>
           <button type="button" class="um-item danger" (click)="logout()">
             <i class="bi bi-box-arrow-right"></i> Sign Out
           </button>
@@ -117,6 +122,53 @@
     <main class="content-area">
       <ng-content></ng-content>
     </main>
+
+    <footer class="site-footer">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="foot-logo"><i class="bi bi-bag-heart-fill"></i></div>
+          <div>
+            <div class="foot-title">PG E-Mart</div>
+            <p class="foot-tag">Your one-stop electronics destination — ACs, TVs, mobiles, laptops and more, delivered fast.</p>
+          </div>
+        </div>
+
+        <div class="foot-block">
+          <h5>Visit our store</h5>
+          <p class="foot-line">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>At/Pune, Kharadi, 411014</span>
+          </p>
+          <p class="foot-line">
+            <i class="bi bi-telephone-fill"></i>
+            <a [href]="'tel:' + auth.phone()" class="foot-link">{{ auth.phone() }}</a>
+          </p>
+          <p class="foot-line">
+            <i class="bi bi-envelope-fill"></i>
+            <a href="mailto:support@pgemart.in" class="foot-link">support&#64;pgemart.in</a>
+          </p>
+        </div>
+
+        <div class="foot-block">
+          <h5>Quick links</h5>
+          <ng-container *ngIf="auth.role() === 'user'">
+            <a routerLink="/user/shop" class="foot-link">Shop</a>
+            <a routerLink="/user/cart" class="foot-link">Cart</a>
+            <a routerLink="/user/orders" class="foot-link">My Orders</a>
+          </ng-container>
+          <ng-container *ngIf="auth.role() === 'admin'">
+            <a routerLink="/admin/dashboard" class="foot-link">Dashboard</a>
+            <a routerLink="/admin/products" class="foot-link">Products</a>
+            <a routerLink="/admin/orders" class="foot-link">Orders</a>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; {{ today | date:'yyyy' }} PG E-Mart. All rights reserved.</span>
+        <span class="foot-made">Made with <i class="bi bi-heart-fill"></i> in Pune</span>
+      </div>
+    </footer>
   </div>
 </div>
 
